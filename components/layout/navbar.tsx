@@ -176,22 +176,22 @@ export function Navbar() {
       {mobileOpen && (
         <div className="border-t lg:hidden">
           <nav className="flex flex-col gap-1 p-4">
-            <div className="mb-2 flex justify-end">
+            <div className="mb-1 flex items-center justify-between">
+              <Link
+                href="/shop"
+                onClick={() => setMobileOpen(false)}
+                className="rounded-md px-3 py-2 font-medium hover:bg-muted"
+              >
+                Каталог
+              </Link>
               <Link
                 href="/contacts"
                 onClick={() => setMobileOpen(false)}
-                className="inline-flex items-center justify-center rounded-full border border-primary px-4 py-1.5 text-xs font-semibold text-primary hover:bg-primary hover:text-primary-foreground"
+                className="inline-flex items-center justify-center rounded-full border border-primary px-3 py-1 text-[11px] font-semibold text-primary hover:bg-primary hover:text-primary-foreground"
               >
                 Контакты
               </Link>
             </div>
-            <Link
-              href="/shop"
-              onClick={() => setMobileOpen(false)}
-              className="rounded-md px-3 py-2 font-medium hover:bg-muted"
-            >
-              Каталог
-            </Link>
             <div className="border-t pt-2">
               <p className="px-3 py-1 text-xs font-semibold text-muted-foreground">
                 Категории
