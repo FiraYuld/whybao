@@ -92,7 +92,8 @@ export default function ProductPage() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="min-w-0 w-full max-w-full overflow-x-hidden">
+      <div className="container mx-auto px-4 py-8 w-full max-w-full">
       <Breadcrumbs
         items={[
           { href: "/", label: "Главная" },
@@ -102,8 +103,8 @@ export default function ProductPage() {
         ]}
       />
 
-      <div className="mt-6 grid gap-8 lg:grid-cols-2">
-        <div className="space-y-4 md:max-w-xl md:mx-auto">
+      <div className="mt-6 grid min-w-0 gap-8 lg:grid-cols-2">
+        <div className="min-w-0 space-y-4 md:max-w-xl md:mx-auto">
           <div className="relative aspect-[3/4] overflow-hidden bg-muted">
             <AnimatePresence mode="wait">
               <motion.div
@@ -149,7 +150,7 @@ export default function ProductPage() {
           </div>
         </div>
 
-        <div className="md:max-w-xl md:mx-auto">
+        <div className="min-w-0 md:max-w-xl md:mx-auto">
           <Link
             href={`/brands/${product.brand}`}
             className="inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground hover:text-foreground"
@@ -260,16 +261,16 @@ export default function ProductPage() {
           </div>
 
           {product.longImages && product.longImages.length > 0 && (
-            <div className="mt-8 space-y-0 md:max-w-2xl md:mx-auto">
+            <div className="mt-8 w-full max-w-full space-y-0 md:max-w-2xl md:mx-auto">
               {product.longImages.map((src, i) => (
-                <div key={i} className="relative w-full">
+                <div key={i} className="relative w-full max-w-full overflow-hidden">
                   <Image
                     src={src}
                     alt={`${product.name} детальное фото ${i + 1}`}
                     width={800}
                     height={1200}
                     unoptimized
-                    className="h-auto w-full object-cover"
+                    className="h-auto max-w-full w-full object-cover"
                   />
                 </div>
               ))}
@@ -282,12 +283,13 @@ export default function ProductPage() {
         <button
           type="button"
           onClick={handleScrollTop}
-          className="fixed bottom-4 right-4 z-40 inline-flex h-10 w-10 items-center justify-center rounded-full border border-border bg-background/90 text-foreground shadow-md backdrop-blur-sm transition-colors hover:bg-muted"
+          className="fixed bottom-5 right-5 z-40 inline-flex h-12 w-12 items-center justify-center rounded-full border-2 border-border bg-background/95 text-foreground shadow-lg backdrop-blur-sm transition-colors hover:bg-muted"
           aria-label="Наверх"
         >
-          <ArrowUp className="size-4" />
+          <ArrowUp className="size-5" />
         </button>
       )}
+      </div>
     </div>
   );
 }

@@ -36,9 +36,9 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${outfit.variable} min-h-screen w-full bg-background text-foreground antialiased`}
       >
-        <div className="flex min-h-screen flex-col">
+        <div className="flex min-h-screen min-w-0 flex-col max-w-full">
           <Navbar />
-          <main className="flex-1">{children}</main>
+          <main className="min-w-0 flex-1 max-w-full overflow-x-hidden">{children}</main>
         </div>
       </body>
     </html>
