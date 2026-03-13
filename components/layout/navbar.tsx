@@ -27,8 +27,11 @@ export function Navbar() {
   };
 
   return (
-    <header className="sticky top-0 z-30 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container mx-auto flex h-14 items-center justify-between gap-3 px-4 md:h-16">
+    <header
+      className="sticky top-0 z-30 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
+      style={{ paddingTop: "env(safe-area-inset-top)" }}
+    >
+      <div className="container mx-auto flex h-14 w-full max-w-full items-center justify-between gap-3 px-4 md:h-16">
         <Link
           href="/"
           className="flex items-center gap-1.5 font-accent text-xl font-bold italic md:text-2xl"

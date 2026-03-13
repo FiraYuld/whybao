@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Outfit } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/layout/navbar";
@@ -19,15 +19,22 @@ export const metadata: Metadata = {
     "Нишевые трендовые вещи из Китая: streetwear, casual с китайским вайбом. Why not Bao?",
 };
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  viewportFit: "cover",
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ru">
+    <html lang="ru" className="touch-manipulation">
       <body
-        className={`${inter.variable} ${outfit.variable} min-h-screen bg-background text-foreground antialiased`}
+        className={`${inter.variable} ${outfit.variable} min-h-screen w-full bg-background text-foreground antialiased`}
       >
         <div className="flex min-h-screen flex-col">
           <Navbar />
