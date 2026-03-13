@@ -20,7 +20,7 @@ export default function CartPage() {
         </p>
         <Link
           href="/shop"
-          className="mt-6 inline-flex h-9 items-center justify-center rounded-lg bg-primary px-4 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+          className="mt-6 inline-flex h-9 items-center justify-center bg-primary px-4 text-sm font-medium text-primary-foreground hover:bg-primary/90"
         >
           В каталог
         </Link>

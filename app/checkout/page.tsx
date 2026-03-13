@@ -51,6 +51,9 @@ export default function CheckoutPage() {
   const [address, setAddress] = useState("");
   const [comment, setComment] = useState("");
   const [error, setError] = useState("");
+  const [errorField, setErrorField] = useState<"name" | "phone" | null>(null);
+  const [isSending, setIsSending] = useState(false);
+  const [toast, setToast] = useState("");
 
   if (items.length === 0) {
     return (
@@ -58,7 +61,7 @@ export default function CheckoutPage() {
         <h1 className="text-2xl font-bold">Корзина пуста</h1>
         <Link
           href="/shop"
-          className="mt-6 inline-flex h-9 items-center justify-center rounded-lg bg-primary px-4 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+          className="mt-6 inline-flex h-9 items-center justify-center bg-primary px-4 text-sm font-medium text-primary-foreground hover:bg-primary/90"
         >
           В каталог
         </Link>
@@ -69,15 +72,21 @@ export default function CheckoutPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+    setErrorField(null);
 
     if (!name.trim()) {
       setError("Укажите имя");
+      setErrorField("name");
       return;
     }
     if (!phone.trim()) {
       setError("Укажите телефон");
+      setErrorField("phone");
       return;
     }
+
+    if (isSending) return;
+    setIsSending(true);
 
     const orderId = generateOrderId();
     const message = buildTelegramMessage(
@@ -96,8 +105,13 @@ export default function CheckoutPage() {
     const url = `https://t.me/${TELEGRAM_USERNAME}?text=${encodeURIComponent(message)}`;
     window.open(url, "_blank");
 
-    clearCart();
-    router.push("/checkout/success");
+    setToast("Мы открыли чат в Telegram. Если окно не появилось — проверь вкладки браузера.");
+    setTimeout(() => {
+      setToast("");
+      setIsSending(false);
+      clearCart();
+      router.push("/checkout/success");
+    }, 2000);
   };
 
   return (
@@ -114,7 +128,7 @@ export default function CheckoutPage() {
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Как к вам обращаться"
-            className="mt-1"
+            className={`mt-1 ${errorField === "name" ? "border-destructive" : ""}`}
             required
           />
         </div>
@@ -126,11 +140,34 @@ export default function CheckoutPage() {
             id="phone"
             type="tel"
             value={phone}
-            onChange={(e) => setPhone(e.target.value)}
+            onChange={(e) => {
+              const digits = e.target.value.replace(/\D/g, "").slice(0, 11);
+              let formatted = digits;
+              if (formatted.startsWith("8")) formatted = "7" + formatted.slice(1);
+              if (!formatted.startsWith("7")) formatted = "7" + formatted;
+              const parts = [
+                formatted.slice(0, 1),
+                formatted.slice(1, 4),
+                formatted.slice(4, 7),
+                formatted.slice(7, 9),
+                formatted.slice(9, 11),
+              ];
+              const view =
+                parts[0] && parts[1]
+                  ? `+${parts[0]} (${parts[1]}${parts[1].length === 3 ? "" : ""})` +
+                    (parts[2] ? ` ${parts[2]}` : "") +
+                    (parts[3] ? `-${parts[3]}` : "") +
+                    (parts[4] ? `-${parts[4]}` : "")
+                  : e.target.value;
+              setPhone(view);
+            }}
             placeholder="+7 (999) 123-45-67"
-            className="mt-1"
+            className={`mt-1 ${errorField === "phone" ? "border-destructive" : ""}`}
             required
           />
+          <p className="mt-1 text-xs text-muted-foreground">
+            Формат: +7 (999) 123-45-67
+          </p>
         </div>
         <div>
           <label htmlFor="address" className="block text-sm font-medium">
@@ -171,8 +208,8 @@ export default function CheckoutPage() {
           </p>
         </div>
 
-        <Button type="submit" size="lg" className="w-full">
-          Отправить менеджеру в Telegram
+        <Button type="submit" size="lg" className="w-full" disabled={isSending}>
+          {isSending ? "Отправляем..." : "Отправить менеджеру в Telegram"}
         </Button>
       </form>
 
@@ -182,6 +219,14 @@ export default function CheckoutPage() {
       >
         ← Вернуться в корзину
       </Link>
+
+      {toast && (
+        <div className="fixed inset-x-0 bottom-4 z-40 flex justify-center px-4">
+          <div className="max-w-md rounded-md bg-card px-4 py-3 text-sm text-muted-foreground shadow-lg">
+            {toast}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

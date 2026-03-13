@@ -1,6 +1,10 @@
 import { products, type Product } from "@/data/products";
 import { useFilterStore } from "@/lib/store/filter-store";
 
+const VISIBLE_PRODUCTS = products.filter((p) => p.category !== "shoes");
+const LETTER_SIZES = ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL"];
+const normalizeSize = (s: string) => s.toUpperCase();
+
 export function getFilteredProducts(
   filters: {
     priceMin: number | null;
@@ -13,7 +17,7 @@ export function getFilteredProducts(
   },
   searchQuery?: string
 ): Product[] {
-  let result = [...products];
+  let result = [...VISIBLE_PRODUCTS];
 
   if (searchQuery?.trim()) {
     const q = searchQuery.trim().toLowerCase();
@@ -38,8 +42,9 @@ export function getFilteredProducts(
     result = result.filter((p) => filters.categories.includes(p.category));
   }
   if (filters.sizes.length > 0) {
+    const selected = filters.sizes.map(normalizeSize);
     result = result.filter((p) =>
-      p.sizes.some((s) => filters.sizes.includes(s))
+      p.sizes.some((s) => selected.includes(normalizeSize(s)))
     );
   }
   if (filters.colors.length > 0) {
@@ -73,17 +78,17 @@ export function getFilteredProducts(
 }
 
 export function getProductBySlug(slug: string): Product | undefined {
-  return products.find((p) => p.slug === slug);
+  return VISIBLE_PRODUCTS.find((p) => p.slug === slug);
 }
 
 export function getProductsByBrand(brandSlug: string): Product[] {
-  return products.filter((p) => p.brand === brandSlug);
+  return VISIBLE_PRODUCTS.filter((p) => p.brand === brandSlug);
 }
 
 export function getNewProducts(limit = 8): Product[] {
-  return products.filter((p) => p.isNew).slice(0, limit);
+  return VISIBLE_PRODUCTS.filter((p) => p.isNew).slice(0, limit);
 }
 
 export function getBestsellers(limit = 8): Product[] {
-  return products.filter((p) => p.isBestseller).slice(0, limit);
+  return VISIBLE_PRODUCTS.filter((p) => p.isBestseller).slice(0, limit);
 }

@@ -54,7 +54,7 @@ export function CartDrawer() {
                     key={`${item.productId}-${item.size}-${item.color}`}
                     className="flex gap-3"
                   >
-                    <div className="relative size-16 shrink-0 overflow-hidden rounded-md bg-muted">
+                    <div className="relative size-16 shrink-0 overflow-hidden bg-muted">
                       <Image
                         src={item.image}
                         alt={item.name}

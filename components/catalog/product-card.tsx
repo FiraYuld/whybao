@@ -2,8 +2,9 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { Heart, ShoppingCart } from "lucide-react";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { useCartStore } from "@/lib/store/cart-store";
 import { useWishlistStore } from "@/lib/store/wishlist-store";
@@ -26,6 +27,19 @@ export function ProductCard({ product, onQuickAdd, index = 0 }: ProductCardProps
   const brandName = brands.find((b) => b.slug === product.brand)?.name ?? product.brand;
   const categoryName =
     categories.find((c) => c.slug === product.category)?.name ?? product.category;
+  const letterSizes = product.sizes
+    .map((s) => s.toUpperCase())
+    .filter((s) => ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL"].includes(s));
+
+  const [imageIndex, setImageIndex] = useState(0);
+
+  useEffect(() => {
+    if (product.images.length <= 1) return;
+    const interval = setInterval(() => {
+      setImageIndex((prev) => (prev + 1) % product.images.length);
+    }, 6000);
+    return () => clearInterval(interval);
+  }, [product.images.length]);
 
   const handleQuickAdd = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -57,14 +71,25 @@ export function ProductCard({ product, onQuickAdd, index = 0 }: ProductCardProps
     >
       <Link href={`/products/${product.slug}`} className="block">
         <div className="relative aspect-[3/4] overflow-hidden bg-muted">
-          <Image
-            src={product.images[0]}
-            alt={product.name}
-            fill
-            unoptimized
-            className="object-cover transition-transform duration-300 group-hover:scale-105"
-            sizes="(max-width: 640px) 50vw, 25vw"
-          />
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={imageIndex}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.25 }}
+              className="absolute inset-0"
+            >
+              <Image
+                src={product.images[imageIndex]}
+                alt={product.name}
+                fill
+                unoptimized
+                className="object-cover transition-transform duration-300 group-hover:scale-105"
+                sizes="(max-width: 640px) 50vw, 25vw"
+              />
+            </motion.div>
+          </AnimatePresence>
           <button
             type="button"
             onClick={handleWishlist}
@@ -91,21 +116,25 @@ export function ProductCard({ product, onQuickAdd, index = 0 }: ProductCardProps
             </Button>
           </div>
         </div>
-        <div className="mt-3 space-y-1">
-          <p className="font-accent text-lg font-bold text-primary">
+        <div className="mt-2 space-y-0.5 md:mt-3 md:space-y-1">
+          <p className="font-accent text-base font-bold text-primary md:text-lg">
             {product.price.toLocaleString("ru-RU")} ₽
           </p>
-          <p className="text-sm font-semibold">{brandName}</p>
-          <p className="text-xs text-muted-foreground">{categoryName}</p>
-          <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs text-muted-foreground">
-            <span>Размеры:</span>
-            {product.sizes.slice(0, 6).map((s) => (
-              <span key={s} className="text-foreground/80">
-                {s}
-              </span>
-            ))}
-            {product.sizes.length > 6 && <span>…</span>}
-          </div>
+          <p className="text-xs font-semibold md:text-sm">{brandName}</p>
+          <p className="text-[11px] text-muted-foreground md:text-xs">
+            {categoryName}
+          </p>
+          {letterSizes.length > 0 && (
+            <div className="flex flex-wrap gap-x-2 gap-y-1 text-[11px] text-muted-foreground md:text-xs">
+              <span className="hidden sm:inline">Размеры:</span>
+              {letterSizes.slice(0, 6).map((s) => (
+                <span key={s} className="text-foreground/80">
+                  {s}
+                </span>
+              ))}
+              {letterSizes.length > 6 && <span>…</span>}
+            </div>
+          )}
         </div>
       </Link>
     </motion.article>

@@ -9,6 +9,7 @@ import { useFilterStore } from "@/lib/store/filter-store";
 import { getFilteredProducts } from "@/lib/product-utils";
 import { Button } from "@/components/ui/button";
 import { Filter } from "lucide-react";
+import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 
 const ITEMS_PER_PAGE = 12;
 
@@ -58,7 +59,7 @@ export function ShopContent() {
   }, [filters, searchQuery]);
 
   return (
-    <div className="container mx-auto flex gap-6 px-4 py-6">
+    <div className="container mx-auto flex flex-col gap-4 px-4 py-6 lg:flex-row">
       <FilterSidebar
         open={filterOpen}
         onClose={() => setFilterOpen(false)}
@@ -66,6 +67,12 @@ export function ShopContent() {
       />
 
       <div className="flex-1">
+        <Breadcrumbs
+          items={[
+            { href: "/", label: "Главная" },
+            { label: "Каталог" },
+          ]}
+        />
         <div className="mb-4 flex flex-wrap items-center justify-between gap-4">
           <Button
             variant="outline"

@@ -18,12 +18,11 @@ const SORT_OPTIONS: { value: SortOption; label: string }[] = [
   { value: "popular", label: "Популярные" },
 ];
 
-const allSizes = Array.from(
-  new Set(products.flatMap((p) => p.sizes))
-).sort();
-const allColors = Array.from(
-  new Set(products.flatMap((p) => p.colors.map((c) => c.name)))
-).sort();
+const LETTER_SIZES = ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL"];
+
+const allSizes = LETTER_SIZES.filter((s) =>
+  products.some((p) => p.sizes.map((x) => x.toUpperCase()).includes(s))
+);
 
 interface FilterSidebarProps {
   open?: boolean;
@@ -179,26 +178,6 @@ export function FilterSidebar({
         </div>
       </div>
 
-      <div>
-        <h4 className="mb-2 text-sm font-medium">Цвет</h4>
-        <div className="flex flex-wrap gap-1.5">
-          {allColors.map((c) => (
-            <button
-              key={c}
-              type="button"
-              onClick={() => toggleColor(c)}
-              className={cn(
-                "rounded-md border px-2 py-1 text-xs transition-colors",
-                selectedColors.includes(c)
-                  ? "border-primary bg-primary/10 text-primary"
-                  : "border-input hover:bg-muted"
-              )}
-            >
-              {c}
-            </button>
-          ))}
-        </div>
-      </div>
     </div>
   );
 

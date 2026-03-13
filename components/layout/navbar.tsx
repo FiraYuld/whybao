@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Search, Heart, Menu, X, CircleHelp } from "lucide-react";
+import { Search, Heart, Menu, X } from "lucide-react";
 import { CartDrawer } from "@/components/cart/cart-drawer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -27,12 +28,21 @@ export function Navbar() {
 
   return (
     <header className="sticky top-0 z-30 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container mx-auto flex h-14 items-center justify-between gap-4 px-4 md:h-16">
+      <div className="container mx-auto flex h-14 items-center justify-between gap-3 px-4 md:h-16">
         <Link
           href="/"
-          className="flex items-center gap-2 font-accent text-xl font-bold italic md:text-2xl"
+          className="flex items-center gap-1.5 font-accent text-xl font-bold italic md:text-2xl"
         >
-          <CircleHelp className="size-6 text-primary" aria-hidden />
+          <span className="relative h-8 w-8 md:h-10 md:w-10">
+            <Image
+              src="/logo.png"
+              alt="WhyBao"
+              fill
+              sizes="40px"
+              className="object-contain"
+              priority
+            />
+          </span>
           <span className="tracking-tight">WhyBao</span>
         </Link>
 

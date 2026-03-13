@@ -57,7 +57,7 @@ export default function HomePage() {
         </h2>
         <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
           <div className="flex flex-col items-center gap-3 text-center">
-            <div className="grid size-24 place-items-center rounded-full bg-blue-100 text-blue-600">
+            <div className="grid size-24 place-items-center bg-blue-100 text-blue-600">
               <span className="text-3xl" aria-hidden>
                 💳
               </span>
@@ -65,7 +65,7 @@ export default function HomePage() {
             <p className="text-sm text-muted-foreground">Доступные цены</p>
           </div>
           <div className="flex flex-col items-center gap-3 text-center">
-            <div className="grid size-24 place-items-center rounded-full bg-green-100 text-green-700">
+            <div className="grid size-24 place-items-center bg-green-100 text-green-700">
               <span className="text-3xl" aria-hidden>
                 💬
               </span>
@@ -75,7 +75,7 @@ export default function HomePage() {
             </p>
           </div>
           <div className="flex flex-col items-center gap-3 text-center">
-            <div className="grid size-24 place-items-center rounded-full bg-rose-100 text-rose-700">
+            <div className="grid size-24 place-items-center bg-rose-100 text-rose-700">
               <span className="text-3xl" aria-hidden>
                 %
               </span>
@@ -85,7 +85,7 @@ export default function HomePage() {
             </p>
           </div>
           <div className="flex flex-col items-center gap-3 text-center">
-            <div className="grid size-24 place-items-center rounded-full bg-yellow-100 text-yellow-800">
+            <div className="grid size-24 place-items-center bg-yellow-100 text-yellow-800">
               <span className="text-3xl" aria-hidden>
                 🛍️
               </span>

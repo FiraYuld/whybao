@@ -24,11 +24,11 @@ const slides = [
   },
   {
     id: 3,
-    title: "Новая коллекция NeonPanda",
-    subtitle: "Неоновые акценты и оверсайз",
+    title: "Новая коллекция Girlyhalo",
+    subtitle: "Куртки и пальто на каждый день",
     image: "https://picsum.photos/seed/whybao-hero3/1920/800",
     cta: "Смотреть бренд",
-    href: "/brands/neonpanda",
+    href: "/brands/girlyhalo",
   },
 ];
 
@@ -38,7 +38,7 @@ export function HeroSlider() {
   useEffect(() => {
     const timer = setInterval(
       () => setCurrent((c) => (c + 1) % slides.length),
-      5000
+      7000
     );
     return () => clearInterval(timer);
   }, []);
