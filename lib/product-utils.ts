@@ -93,6 +93,6 @@ export function getBestsellers(limit = 8): Product[] {
   return VISIBLE_PRODUCTS.filter((p) => p.isBestseller).slice(0, limit);
 }
 
-export function getCatalogPreview(limit = 8): Product[] {
+export function getCatalogPreview(limit = 14): Product[] {
   return VISIBLE_PRODUCTS.slice(0, limit);
 }

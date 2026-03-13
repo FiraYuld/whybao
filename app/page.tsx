@@ -5,7 +5,7 @@ import { categories } from "@/data/categories";
 import { getCatalogPreview } from "@/lib/product-utils";
 
 export default function HomePage() {
-  const catalogPreview = getCatalogPreview(8);
+  const catalogPreview = getCatalogPreview(14);
 
   return (
     <div>
@@ -40,7 +40,7 @@ export default function HomePage() {
           <h2 className="font-accent text-2xl font-bold">Каталог</h2>
           <Link
             href="/shop"
-            className="inline-flex h-7 items-center rounded-none border border-border bg-background px-2.5 text-sm font-medium transition-colors hover:bg-muted hover:text-foreground"
+            className="inline-flex h-9 items-center gap-2 rounded-none border-2 border-primary bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
           >
             Смотреть дальше
           </Link>
@@ -49,6 +49,14 @@ export default function HomePage() {
           {catalogPreview.map((p, i) => (
             <ProductCard key={p.id} product={p} index={i} />
           ))}
+        </div>
+        <div className="mt-8 flex justify-center">
+          <Link
+            href="/shop"
+            className="inline-flex h-10 items-center gap-2 rounded-none border-2 border-primary bg-primary px-6 py-2 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
+          >
+            Смотреть дальше
+          </Link>
         </div>
       </section>
       <section className="container mx-auto px-4 py-10">
