@@ -32,6 +32,7 @@ export function ProductCard({ product, onQuickAdd, index = 0 }: ProductCardProps
     .filter((s) => ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL"].includes(s));
 
   const [imageIndex, setImageIndex] = useState(0);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   useEffect(() => {
     if (product.images.length <= 1) return;
@@ -40,6 +41,24 @@ export function ProductCard({ product, onQuickAdd, index = 0 }: ProductCardProps
     }, 6000);
     return () => clearInterval(interval);
   }, [product.images.length]);
+
+  useEffect(() => {
+    setImageLoaded(false);
+  }, [imageIndex]);
+
+  // Предзагрузка следующего и предыдущего фото
+  useEffect(() => {
+    if (product.images.length <= 1) return;
+    const n = product.images.length;
+    const nextSrc = product.images[(imageIndex + 1) % n];
+    const prevSrc = product.images[(imageIndex - 1 + n) % n];
+    const preload = (src: string) => {
+      const img = new Image();
+      img.src = src;
+    };
+    preload(nextSrc);
+    preload(prevSrc);
+  }, [product.images, imageIndex]);
 
   const handleQuickAdd = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -71,11 +90,17 @@ export function ProductCard({ product, onQuickAdd, index = 0 }: ProductCardProps
     >
       <Link href={`/products/${product.slug}`} className="block">
         <div className="relative aspect-[3/4] overflow-hidden bg-muted">
+          {!imageLoaded && (
+            <div
+              className="absolute inset-0 animate-pulse bg-muted-foreground/10"
+              aria-hidden
+            />
+          )}
           <AnimatePresence mode="wait">
             <motion.div
               key={imageIndex}
               initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
+              animate={{ opacity: imageLoaded ? 1 : 0 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.25 }}
               className="absolute inset-0"
@@ -87,6 +112,7 @@ export function ProductCard({ product, onQuickAdd, index = 0 }: ProductCardProps
                 unoptimized
                 className="object-cover transition-transform duration-300 group-hover:scale-105"
                 sizes="(max-width: 640px) 50vw, 25vw"
+                onLoad={() => setImageLoaded(true)}
               />
             </motion.div>
           </AnimatePresence>

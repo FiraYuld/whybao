@@ -23,6 +23,8 @@ export default function ProductPage() {
     product?.colors[0]?.name ?? ""
   );
   const [imageIndex, setImageIndex] = useState(0);
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [loadedLongIndexes, setLoadedLongIndexes] = useState<Set<number>>(new Set());
   const [showScrollTop, setShowScrollTop] = useState(false);
 
   const addItem = useCartStore((s) => s.addItem);
@@ -49,6 +51,34 @@ export default function ProductPage() {
     }, 6000);
     return () => clearInterval(interval);
   }, [product]);
+
+  // Сбрасываем «загружено» при смене слайда, чтобы показать скелетон
+  useEffect(() => {
+    setImageLoaded(false);
+  }, [imageIndex]);
+
+  // Предзагрузка следующего и предыдущего фото для плавного автоскролла
+  useEffect(() => {
+    if (!product?.images?.length) return;
+    const n = product.images.length;
+    const nextSrc = product.images[(imageIndex + 1) % n];
+    const prevSrc = product.images[(imageIndex - 1 + n) % n];
+    const preload = (src: string) => {
+      const img = new Image();
+      img.src = src;
+    };
+    preload(nextSrc);
+    if (n > 1) preload(prevSrc);
+  }, [product, imageIndex]);
+
+  // Предзагрузка первых longImages при открытии страницы
+  useEffect(() => {
+    if (!product?.longImages?.length) return;
+    product.longImages.slice(0, 4).forEach((src) => {
+      const img = new Image();
+      img.src = src;
+    });
+  }, [product?.longImages]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -106,11 +136,17 @@ export default function ProductPage() {
       <div className="mt-6 grid min-w-0 gap-8 lg:grid-cols-2">
         <div className="min-w-0 space-y-4 md:max-w-xl md:mx-auto">
           <div className="relative aspect-[3/4] overflow-hidden bg-muted">
+            {!imageLoaded && (
+              <div
+                className="absolute inset-0 animate-pulse bg-muted-foreground/10"
+                aria-hidden
+              />
+            )}
             <AnimatePresence mode="wait">
               <motion.div
                 key={imageIndex}
                 initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
+                animate={{ opacity: imageLoaded ? 1 : 0 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.25 }}
                 className="absolute inset-0"
@@ -123,6 +159,7 @@ export default function ProductPage() {
                   className="object-cover"
                   priority
                   sizes="(max-width: 1024px) 100vw, 50vw"
+                  onLoad={() => setImageLoaded(true)}
                 />
               </motion.div>
             </AnimatePresence>
@@ -263,7 +300,13 @@ export default function ProductPage() {
           {product.longImages && product.longImages.length > 0 && (
             <div className="mt-8 w-full max-w-full space-y-0 md:max-w-2xl md:mx-auto">
               {product.longImages.map((src, i) => (
-                <div key={i} className="relative w-full max-w-full overflow-hidden">
+                <div key={i} className="relative w-full max-w-full overflow-hidden min-h-[200px]">
+                  {!loadedLongIndexes.has(i) && (
+                    <div
+                      className="absolute inset-0 min-h-[200px] animate-pulse bg-muted-foreground/10"
+                      aria-hidden
+                    />
+                  )}
                   <Image
                     src={src}
                     alt={`${product.name} детальное фото ${i + 1}`}
@@ -271,6 +314,9 @@ export default function ProductPage() {
                     height={1200}
                     unoptimized
                     className="h-auto max-w-full w-full object-cover"
+                    onLoad={() =>
+                      setLoadedLongIndexes((prev) => new Set(prev).add(i))
+                    }
                   />
                 </div>
               ))}

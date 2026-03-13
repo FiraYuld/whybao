@@ -6,14 +6,17 @@ import { Navbar } from "@/components/layout/navbar";
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
+  display: "swap",
 });
 
 const outfit = Outfit({
   variable: "--font-outfit",
   subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://whybao.ru"),
   title: "WhyBao — Тренды из Китая для тебя",
   description:
     "Нишевые трендовые вещи из Китая: streetwear, casual с китайским вайбом. Why not Bao?",

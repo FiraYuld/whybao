@@ -81,6 +81,10 @@ export function getProductBySlug(slug: string): Product | undefined {
   return VISIBLE_PRODUCTS.find((p) => p.slug === slug);
 }
 
+export function getAllProductSlugs(): string[] {
+  return VISIBLE_PRODUCTS.map((p) => p.slug);
+}
+
 export function getProductsByBrand(brandSlug: string): Product[] {
   return VISIBLE_PRODUCTS.filter((p) => p.brand === brandSlug);
 }
