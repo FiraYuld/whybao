@@ -3,7 +3,6 @@ import { HeroSlider } from "@/components/home/hero-slider";
 import { ProductCard } from "@/components/catalog/product-card";
 import { categories } from "@/data/categories";
 import { getCatalogPreview } from "@/lib/product-utils";
-import { Button } from "@/components/ui/button";
 
 export default function HomePage() {
   const catalogPreview = getCatalogPreview(8);
@@ -39,9 +38,12 @@ export default function HomePage() {
       <section className="container mx-auto px-4 py-8">
         <div className="mb-4 flex items-center justify-between">
           <h2 className="font-accent text-2xl font-bold">Каталог</h2>
-          <Button asChild variant="outline" size="sm">
-            <Link href="/shop">Смотреть дальше</Link>
-          </Button>
+          <Link
+            href="/shop"
+            className="inline-flex h-7 items-center rounded-none border border-border bg-background px-2.5 text-sm font-medium transition-colors hover:bg-muted hover:text-foreground"
+          >
+            Смотреть дальше
+          </Link>
         </div>
         <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
           {catalogPreview.map((p, i) => (
