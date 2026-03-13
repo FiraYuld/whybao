@@ -64,7 +64,8 @@ export default function ProductPage() {
     const nextSrc = product.images[(imageIndex + 1) % n];
     const prevSrc = product.images[(imageIndex - 1 + n) % n];
     const preload = (src: string) => {
-      const img = new Image();
+      if (typeof window === "undefined") return;
+      const img = new window.Image();
       img.src = src;
     };
     preload(nextSrc);
@@ -73,9 +74,9 @@ export default function ProductPage() {
 
   // Предзагрузка первых longImages при открытии страницы
   useEffect(() => {
-    if (!product?.longImages?.length) return;
+    if (!product?.longImages?.length || typeof window === "undefined") return;
     product.longImages.slice(0, 4).forEach((src) => {
-      const img = new Image();
+      const img = new window.Image();
       img.src = src;
     });
   }, [product?.longImages]);

@@ -48,12 +48,12 @@ export function ProductCard({ product, onQuickAdd, index = 0 }: ProductCardProps
 
   // Предзагрузка следующего и предыдущего фото
   useEffect(() => {
-    if (product.images.length <= 1) return;
+    if (product.images.length <= 1 || typeof window === "undefined") return;
     const n = product.images.length;
     const nextSrc = product.images[(imageIndex + 1) % n];
     const prevSrc = product.images[(imageIndex - 1 + n) % n];
     const preload = (src: string) => {
-      const img = new Image();
+      const img = new window.Image();
       img.src = src;
     };
     preload(nextSrc);
