@@ -3,6 +3,9 @@ export const brands = [
   { id: "zizifei", name: "ziziFei", slug: "zizifei" },
   { id: "napsnaps", name: "NAPSNAPS", slug: "napsnaps" },
   { id: "jikoo", name: "JIKOO", slug: "jikoo" },
+  { id: "betweenand", name: "BETWEENAND", slug: "betweenand" },
+  { id: "unifree", name: "UNIFREE", slug: "unifree" },
+  { id: "weekendhub", name: "weekendhub", slug: "weekendhub" },
 ] as const;
 
 export type BrandSlug = (typeof brands)[number]["slug"];

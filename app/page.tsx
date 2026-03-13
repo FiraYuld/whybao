@@ -70,7 +70,9 @@ export default function HomePage() {
                 💳
               </span>
             </div>
-            <p className="text-sm text-muted-foreground">Доступные цены</p>
+            <p className="text-sm text-muted-foreground">
+              Большой ассортимент от различных брендов
+            </p>
           </div>
           <div className="flex flex-col items-center gap-3 text-center">
             <div className="grid size-24 place-items-center bg-green-100 text-green-700">
@@ -79,7 +81,7 @@ export default function HomePage() {
               </span>
             </div>
             <p className="text-sm text-muted-foreground">
-              Консультация с менеджером
+              Прямая связь с менеджером для любых вопросов
             </p>
           </div>
           <div className="flex flex-col items-center gap-3 text-center">
@@ -89,7 +91,7 @@ export default function HomePage() {
               </span>
             </div>
             <p className="text-sm text-muted-foreground">
-              Регулярные скидки, бонусы и подарки
+              Новинки каждую неделю
             </p>
           </div>
           <div className="flex flex-col items-center gap-3 text-center">
@@ -99,7 +101,7 @@ export default function HomePage() {
               </span>
             </div>
             <p className="text-sm text-muted-foreground">
-              Комплексный уход одной линейки продукции
+              Международная логистика уже оплачена
             </p>
           </div>
         </div>

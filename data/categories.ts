@@ -1,5 +1,5 @@
 export const categories = [
-  { id: "hoodies", name: "Свитшоты / Hoodies", slug: "hoodies" },
+  { id: "hoodies", name: "Свитшоты / худи", slug: "hoodies" },
   { id: "tshirts", name: "Футболки", slug: "tshirts" },
   { id: "longsleeves", name: "Лонгсливы", slug: "longsleeves" },
   { id: "shirts-blouses", name: "Рубашки / блузки", slug: "shirts-blouses" },
