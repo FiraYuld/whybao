@@ -3,9 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "node scripts/dev.js",
+    "dev:webpack": "node scripts/dev.js --webpack",
+    "dev:simple": "next dev -H 0.0.0.0 --webpack",
+    "tunnel": "npx cloudflared tunnel --url http://localhost:3000",
+    "tunnel:lt": "npx localtunnel --port 3000",
     "build": "next build",
     "start": "next start",
+    "serve": "next build && next start -H 0.0.0.0",
     "lint": "eslint"
   },
   "dependencies": {
@@ -16,6 +21,7 @@
     "lucide-react": "^0.577.0",
     "next": "16.1.6",
     "next-themes": "^0.4.6",
+    "radix-ui": "^1.4.3",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "shadcn": "^4.0.6",
