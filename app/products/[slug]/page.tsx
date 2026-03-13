@@ -29,6 +29,19 @@ export default function ProductPage() {
   const toggleWishlist = useWishlistStore((s) => s.toggle);
   const inWishlist = useWishlistStore((s) => s.has(slug));
 
+  const unavailableSizes =
+    product?.outOfStock?.find((o) => o.color === selectedColor)?.sizes ?? [];
+
+  useEffect(() => {
+    if (!product) return;
+    const unavailable =
+      product.outOfStock?.find((o) => o.color === selectedColor)?.sizes ?? [];
+    if (unavailable.includes(selectedSize)) {
+      const firstAvailable = product.sizes.find((s) => !unavailable.includes(s));
+      setSelectedSize(firstAvailable ?? product.sizes[0] ?? "");
+    }
+  }, [product, selectedColor]);
+
   useEffect(() => {
     if (!product || product.images.length <= 1) return;
     const interval = setInterval(() => {
@@ -63,7 +76,10 @@ export default function ProductPage() {
 
   const brandName = brands.find((b) => b.slug === product.brand)?.name ?? product.brand;
 
+  const canAddToCart = !unavailableSizes.includes(selectedSize);
+
   const handleAddToCart = () => {
+    if (!canAddToCart) return;
     addItem({
       productId: product.id,
       slug: product.slug,
@@ -160,20 +176,30 @@ export default function ProductPage() {
                       s.toUpperCase()
                     )
                   )
-                  .map((s) => (
-                  <button
-                    key={s}
-                    type="button"
-                    onClick={() => setSelectedSize(s)}
-                    className={`rounded-md border px-4 py-2 text-sm transition-colors ${
-                      selectedSize === s
-                        ? "border-primary bg-primary text-primary-foreground"
-                        : "border-input hover:bg-muted"
-                    }`}
-                  >
-                    {s}
-                  </button>
-                ))}
+                  .map((s) => {
+                    const outOfStock = unavailableSizes.includes(s);
+                    return (
+                      <button
+                        key={s}
+                        type="button"
+                        disabled={outOfStock}
+                        onClick={() => !outOfStock && setSelectedSize(s)}
+                        className={`rounded-md border px-4 py-2 text-sm transition-colors ${
+                          outOfStock
+                            ? "cursor-not-allowed border-input bg-muted text-muted-foreground opacity-60"
+                            : selectedSize === s
+                              ? "border-primary bg-primary text-primary-foreground"
+                              : "border-input hover:bg-muted"
+                        }`}
+                        title={outOfStock ? "Нет в наличии" : undefined}
+                      >
+                        {s}
+                        {outOfStock && (
+                          <span className="ml-1 text-[10px]">(нет)</span>
+                        )}
+                      </button>
+                    );
+                  })}
               </div>
             </div>
           )}
@@ -205,9 +231,14 @@ export default function ProductPage() {
           )}
 
           <div className="mt-8 flex gap-3">
-            <Button size="lg" className="flex-1" onClick={handleAddToCart}>
+            <Button
+              size="lg"
+              className="flex-1"
+              onClick={handleAddToCart}
+              disabled={!canAddToCart}
+            >
               <ShoppingCart className="mr-2 size-5" />
-              В корзину
+              {canAddToCart ? "В корзину" : "Выберите размер"}
             </Button>
             <Button
               size="lg"

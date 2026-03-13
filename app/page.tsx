@@ -2,10 +2,11 @@ import Link from "next/link";
 import { HeroSlider } from "@/components/home/hero-slider";
 import { ProductCard } from "@/components/catalog/product-card";
 import { categories } from "@/data/categories";
-import { getNewProducts } from "@/lib/product-utils";
+import { getCatalogPreview } from "@/lib/product-utils";
+import { Button } from "@/components/ui/button";
 
 export default function HomePage() {
-  const newProducts = getNewProducts(8);
+  const catalogPreview = getCatalogPreview(8);
 
   return (
     <div>
@@ -37,16 +38,13 @@ export default function HomePage() {
 
       <section className="container mx-auto px-4 py-8">
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="font-accent text-2xl font-bold">Новинки</h2>
-          <Link
-            href="/shop?sort=newest"
-            className="text-sm font-medium text-primary hover:underline"
-          >
-            Смотреть все
-          </Link>
+          <h2 className="font-accent text-2xl font-bold">Каталог</h2>
+          <Button asChild variant="outline" size="sm">
+            <Link href="/shop">Смотреть дальше</Link>
+          </Button>
         </div>
         <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-          {newProducts.map((p, i) => (
+          {catalogPreview.map((p, i) => (
             <ProductCard key={p.id} product={p} index={i} />
           ))}
         </div>
