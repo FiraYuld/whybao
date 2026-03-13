@@ -117,6 +117,15 @@ export function Navbar() {
           >
             Каталог
           </Link>
+          <Link
+            href="/contacts"
+            className={cn(
+              "rounded-md px-3 py-2 text-sm font-medium hover:bg-muted",
+              pathname === "/contacts" && "bg-muted"
+            )}
+          >
+            Контакты
+          </Link>
         </nav>
 
         {/* Actions */}
@@ -134,9 +143,6 @@ export function Navbar() {
             <Heart className="size-5" />
           </Link>
           <CartDrawer />
-          <Link href="/account" className="p-2 text-foreground hover:text-primary" aria-label="Аккаунт">
-            <span className="text-lg" role="img" aria-hidden>👤</span>
-          </Link>
           <Button
             variant="ghost"
             size="icon"
@@ -207,6 +213,13 @@ export function Navbar() {
                 </Link>
               ))}
             </div>
+            <Link
+              href="/contacts"
+              onClick={() => setMobileOpen(false)}
+              className="mt-2 rounded-md px-3 py-2 font-medium hover:bg-muted"
+            >
+              Контакты
+            </Link>
           </nav>
         </div>
       )}

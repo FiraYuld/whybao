@@ -11,6 +11,7 @@ import { brands } from "@/data/brands";
 import { useCartStore } from "@/lib/store/cart-store";
 import { useWishlistStore } from "@/lib/store/wishlist-store";
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";
+import { ProductCard } from "@/components/catalog/product-card";
 import { AnimatePresence, motion } from "framer-motion";
 
 export default function ProductPage() {
@@ -290,6 +291,24 @@ export default function ProductPage() {
               />
             </Button>
           </div>
+
+          {product.relatedSlugs && product.relatedSlugs.length > 0 && (
+            <section className="mt-8 border-t pt-8">
+              <h3 className="font-medium text-lg">С этим товаром покупают</h3>
+              <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+                {product.relatedSlugs
+                  .map((relatedSlug) => getProductBySlug(relatedSlug))
+                  .filter(Boolean)
+                  .map((related) => (
+                    <ProductCard
+                      key={related!.id}
+                      product={related!}
+                      index={0}
+                    />
+                  ))}
+              </div>
+            </section>
+          )}
 
           <div className="mt-8 border-t pt-8">
             <h3 className="font-medium">Описание</h3>

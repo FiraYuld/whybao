@@ -14,6 +14,8 @@ export interface Product {
   longImages?: string[];
   /** Размеры, которых нет в наличии для выбранного цвета (цвет → размеры) */
   outOfStock?: { color: string; sizes: string[] }[];
+  /** Слаги товаров из одного комплекта / «с этим товаром покупают» */
+  relatedSlugs?: string[];
 }
 
 export const products: Product[] = [
@@ -185,7 +187,7 @@ export const products: Product[] = [
     sizes: ["S", "M", "L"],
     colors: [{ name: "Тёмно-коричневый", hex: "#3d2914" }],
     description:
-      "Пальто Girlyhalo с капюшоном и роговыми пуговицами — тёплое и уютное, с мягким силуэтом и удобной длиной для повседневной носки.\n\nКатегория:\n• Пальто / куртки\n\nПараметры модели:\n• Рост: 163 см\n• Вес: 45 кг\n• Объемы (грудь/талия/бедра): 76/58/82 см\n• Размер на модели: S\n\nСостав:\n• Внешняя ткань: 50% катион, 50% полиэстер\n• Подкладка: 95% полиэстер, 5% спандекс",
+      "Пальто Girlyhalo с капюшоном и роговыми пуговицами — тёплое и уютное, с мягким силуэтом и удобной длиной для повседневной носки.\n\nПараметры модели:\n• Рост: 163 см\n• Вес: 45 кг\n• Объемы (грудь/талия/бедра): 76/58/82 см\n• Размер на модели: S\n\nСостав:\n• Внешняя ткань: 50% катион, 50% полиэстер\n• Подкладка: 95% полиэстер, 5% спандекс",
     longImages: [
       "/products/girlyhalo5/desc_1.webp",
       "/products/girlyhalo5/desc_2.webp",
@@ -223,7 +225,7 @@ export const products: Product[] = [
     sizes: ["S", "M", "L"],
     colors: [{ name: "Клетка", hex: "#8b6b5a" }],
     description:
-      "Пальто ziziFei с бантом в клетку — тёплое зимнее пальто с мягкой посадкой и акцентом на поясе. Универсальный силуэт под джинсы, платья и юбки.\n\nКатегория:\n• Пальто / зимнее пальто\n\nПараметры модели:\n• Рост: 172 см\n• Вес: 50 кг\n• Объемы (грудь/талия/бедра): 79.5/62/88 см\n• Размер на модели: S\n\nСостав:\n• Внешняя ткань: 70% полиэстер, 30% акрил\n• Подкладка: 100% полиэстер",
+      "Пальто ziziFei с бантом в клетку — тёплое зимнее пальто с мягкой посадкой и акцентом на поясе. Универсальный силуэт под джинсы, платья и юбки.\n\nПараметры модели:\n• Рост: 172 см\n• Вес: 50 кг\n• Объемы (грудь/талия/бедра): 79.5/62/88 см\n• Размер на модели: S\n\nСостав:\n• Внешняя ткань: 70% полиэстер, 30% акрил\n• Подкладка: 100% полиэстер",
     longImages: [
       "/products/zizifei1/desc_1.webp",
       "/products/zizifei1/desc_2.webp",
@@ -261,7 +263,7 @@ export const products: Product[] = [
     sizes: ["S", "M", "L"],
     colors: [{ name: "Серый", hex: "#6b7280" }],
     description:
-      "Плащ-накидка NAPSNAPS в крупную клетку — лёгкий, но выразительный слой поверх базовых образов. Можно носить как открытым, так и подпоясанным.\n\nКатегория:\n• Плащ / пальто\n\nПараметры модели:\n• Модель 1 (Чао Чао): рост 163 см, вес 44 кг, на модели размер M\n• Модель 2 (Цзяонин): рост 171 см, вес 45 кг, на модели размер M\n\nСостав:\n• 90% полиэстер, 7% вискоза, 3% эластан (спандекс)",
+      "Плащ-накидка NAPSNAPS в крупную клетку — лёгкий, но выразительный слой поверх базовых образов. Можно носить как открытым, так и подпоясанным.\n\nПараметры модели:\n• Модель 1 (Чао Чао): рост 163 см, вес 44 кг, на модели размер M\n• Модель 2 (Цзяонин): рост 171 см, вес 45 кг, на модели размер M\n\nСостав:\n• 90% полиэстер, 7% вискоза, 3% эластан (спандекс)",
     longImages: [
       "/products/napsnaps1/desc_1.webp",
       "/products/napsnaps1/desc_2.webp",
@@ -298,7 +300,7 @@ export const products: Product[] = [
       { name: "Коричневый", hex: "#5c4a3d" },
     ],
     description:
-      "Пальто ziziFei «Pong Pong Winter Gift» с воротничком и бантом — зимнее пальто с аккуратной посадкой и акцентом на деталях.\n\nКатегория:\n• Пальто / зимнее пальто\n\nПараметры модели:\n• Yagucca: рост 173 см, вес 47 кг, объемы 79/59/86.5 см, размер на модели S\n\nСостав:\n• Внешняя ткань: 58% полиэстер, 20% вискоза, 15% шерсть, 7% лиоцелл\n• Подкладка: 100% полиэстер",
+      "Пальто ziziFei «Pong Pong Winter Gift» с воротничком и бантом — зимнее пальто с аккуратной посадкой и акцентом на деталях.\n\nПараметры модели:\n• Yagucca: рост 173 см, вес 47 кг, объемы 79/59/86.5 см, размер на модели S\n\nСостав:\n• Внешняя ткань: 58% полиэстер, 20% вискоза, 15% шерсть, 7% лиоцелл\n• Подкладка: 100% полиэстер",
     longImages: [
       "/products/zizifei2/desc_1.webp",
       "/products/zizifei2/desc_2.webp",
@@ -350,7 +352,7 @@ export const products: Product[] = [
     ],
     outOfStock: [{ color: "Зелёный", sizes: ["S"] }],
     description:
-      "Пальто ziziFei с бантом и асимметричным подолом — зимнее пальто с выразительным силуэтом. Два варианта цвета.\n\nКатегория:\n• Пальто / зимнее пальто\n\nПараметры модели:\n• Clara: рост 169 см, вес 47 кг, объемы 73/59/89 см, размер на модели S\n• BB: рост 171 см, вес 47 кг, объемы 74/60/86 см, размер на модели S\n\nСостав:\n• Внешняя ткань: 90% полиэстер, 10% вискоза\n• Подкладка: 100% полиэстер",
+      "Пальто ziziFei с бантом и асимметричным подолом — зимнее пальто с выразительным силуэтом. Два варианта цвета.\n\nПараметры модели:\n• Clara: рост 169 см, вес 47 кг, объемы 73/59/89 см, размер на модели S\n• BB: рост 171 см, вес 47 кг, объемы 74/60/86 см, размер на модели S\n\nСостав:\n• Внешняя ткань: 90% полиэстер, 10% вискоза\n• Подкладка: 100% полиэстер",
     longImages: [
       "/products/zizifei3/desc_1.webp",
       "/products/zizifei3/desc_2.webp",
@@ -395,7 +397,7 @@ export const products: Product[] = [
     sizes: ["S", "M", "L"],
     colors: [{ name: "Синий", hex: "#2c3e50" }],
     description:
-      "Свитер ziziFei с бантом и норвежским узором — уютная модель в стиле джемпера.\n\nКатегория:\n• Свитер / джемпер\n\nПараметры модели:\n• Clara: рост 169 см, вес 47 кг, объемы 73/59/89 см, размер на модели S\n\nСостав (основная пряжа):\n• 48% нейлон\n• 29% полиэстер\n• 16% акрил\n• 6% шерсть\n• 1% эластан\n\nДополнительная пряжа:\n• 45% нейлон\n• 42% полиэстер\n• 12% шерсть\n• 1% эластан",
+      "Свитер ziziFei с бантом и норвежским узором — уютная модель в стиле джемпера.\n\nПараметры модели:\n• Clara: рост 169 см, вес 47 кг, объемы 73/59/89 см, размер на модели S\n\nСостав (основная пряжа):\n• 48% нейлон\n• 29% полиэстер\n• 16% акрил\n• 6% шерсть\n• 1% эластан\n\nДополнительная пряжа:\n• 45% нейлон\n• 42% полиэстер\n• 12% шерсть\n• 1% эластан",
     longImages: [
       "/products/zizifei4/desc_1.webp",
       "/products/zizifei4/desc_2.webp",
@@ -433,7 +435,7 @@ export const products: Product[] = [
     sizes: ["S", "M", "L"],
     colors: [{ name: "Чёрный", hex: "#0a0a0a" }],
     description:
-      "Пуховик ziziFei с кружевом и матросским воротником — тёплая куртка с выразительными деталями.\n\nКатегория:\n• Куртка / пуховик\n\nПараметры модели:\n• Clara: рост 169 см, вес 47 кг, объемы 73/59/89 см, размер на модели S\n• BB: рост 171 см, вес 47 кг, объемы 74/60/86 см, размер на модели S\n\nСостав:\n• Внешняя ткань: 95% полиэстер, 5% спандекс\n• Подкладка: 100% полиэстер\n• Наполнитель (утеплитель): 100% полиэстер",
+      "Пуховик ziziFei с кружевом и матросским воротником — тёплая куртка с выразительными деталями.\n\nПараметры модели:\n• Clara: рост 169 см, вес 47 кг, объемы 73/59/89 см, размер на модели S\n• BB: рост 171 см, вес 47 кг, объемы 74/60/86 см, размер на модели S\n\nСостав:\n• Внешняя ткань: 95% полиэстер, 5% спандекс\n• Подкладка: 100% полиэстер\n• Наполнитель (утеплитель): 100% полиэстер",
     longImages: [
       "/products/zizifei5/desc_0.webp",
       "/products/zizifei5/desc_1.webp",
@@ -473,7 +475,7 @@ export const products: Product[] = [
     sizes: ["S", "M", "L"],
     colors: [{ name: "Белый", hex: "#fafafa" }],
     description:
-      "Блуза ziziFei «Входной билет в сказку» с бантом и воротничком в горох — лёгкая и нарядная модель из хлопка.\n\nКатегория:\n• Блуза / рубашка\n\nПараметры модели:\n• Yagucca: рост 173 см, вес 47 кг, объемы 79/59/86.5 см, размер на модели S\n\nСостав:\n• 100% хлопок",
+      "Блуза ziziFei «Входной билет в сказку» с бантом и воротничком в горох — лёгкая и нарядная модель из хлопка.\n\nПараметры модели:\n• Yagucca: рост 173 см, вес 47 кг, объемы 79/59/86.5 см, размер на модели S\n\nСостав:\n• 100% хлопок",
     longImages: [
       "/products/zizifei6/desc_1.webp",
       "/products/zizifei6/desc_2.webp",
@@ -493,9 +495,136 @@ export const products: Product[] = [
       "/products/zizifei6/desc_16.webp",
       "/products/zizifei6/desc_17.webp",
       "/products/zizifei6/desc_18.webp",
-      "/products/zizifei6/desc_19.webp",
-      "/products/zizifei6/desc_20.webp",
+    "/products/zizifei6/desc_19.webp",
+    "/products/zizifei6/desc_20.webp",
     ],
     isNew: true,
+  },
+  {
+    id: "53",
+    slug: "zizifei7",
+    name: "Джинсы карго с бантом и высокой талией",
+    brand: "zizifei",
+    category: "pants",
+    price: 5800,
+    images: [
+      "/products/zizifei7/1.webp",
+      "/products/zizifei7/2.webp",
+      "/products/zizifei7/3.webp",
+      "/products/zizifei7/4.webp",
+      "/products/zizifei7/5.webp",
+      "/products/zizifei7/6.webp",
+    ],
+    sizes: ["S", "M", "L"],
+    colors: [{ name: "Чёрный", hex: "#1a1a1a" }],
+    description:
+      "Джинсы карго ziziFei с бантом и высокой талией.\n\nПараметры модели:\n• Vasilisa: рост 168 см, вес 48 кг, объемы 78/62/88 см, размер на модели S\n• Lryna: рост 169 см, вес 46.1 кг, объемы 78/59/85 см, размер на модели S\n\nСостав:\n• 85% хлопок, 15% полиэстер",
+    longImages: [
+      "/products/zizifei7/desc_1.webp",
+      "/products/zizifei7/desc_2.webp",
+      "/products/zizifei7/desc_3.webp",
+      "/products/zizifei7/desc_4.webp",
+      "/products/zizifei7/desc_5.webp",
+      "/products/zizifei7/desc_6.webp",
+      "/products/zizifei7/desc_7.webp",
+      "/products/zizifei7/desc_8.webp",
+      "/products/zizifei7/desc_9.webp",
+      "/products/zizifei7/desc_10.webp",
+      "/products/zizifei7/desc_11.webp",
+      "/products/zizifei7/desc_12.webp",
+      "/products/zizifei7/desc_13.webp",
+      "/products/zizifei7/desc_14.webp",
+      "/products/zizifei7/desc_15.webp",
+      "/products/zizifei7/desc_16.webp",
+      "/products/zizifei7/desc_17.webp",
+      "/products/zizifei7/desc_18.webp",
+    ],
+    isNew: true,
+  },
+  {
+    id: "54",
+    slug: "jikoo1",
+    name: "Брюки «Туманные строки» со съёмной драпировкой",
+    brand: "jikoo",
+    category: "pants",
+    price: 7000,
+    images: [
+      "/products/jikoo1/1.webp",
+      "/products/jikoo1/2.webp",
+      "/products/jikoo1/3.webp",
+      "/products/jikoo1/4.webp",
+      "/products/jikoo1/5.webp",
+    ],
+    sizes: ["S", "M", "L"],
+    colors: [{ name: "Чёрный", hex: "#1a1a1a" }],
+    description:
+      "Брюки JIKOO «Туманные строки» со съёмной драпировкой.\n\nПараметры модели:\n• Рост: 168 см, объемы 76/56/85 см, размер на модели M\n\nСостав:\n• 100% хлопок",
+    longImages: [
+      "/products/jikoo1/desc_1.webp",
+      "/products/jikoo1/desc_2.webp",
+      "/products/jikoo1/desc_3.webp",
+      "/products/jikoo1/desc_4.webp",
+      "/products/jikoo1/desc_5.webp",
+      "/products/jikoo1/desc_6.webp",
+      "/products/jikoo1/desc_7.webp",
+      "/products/jikoo1/desc_8.webp",
+      "/products/jikoo1/desc_9.webp",
+      "/products/jikoo1/desc_10.webp",
+      "/products/jikoo1/desc_11.webp",
+      "/products/jikoo1/desc_12.webp",
+      "/products/jikoo1/desc_13.webp",
+      "/products/jikoo1/desc_14.webp",
+      "/products/jikoo1/desc_15.webp",
+      "/products/jikoo1/desc_16.webp",
+    ],
+    isNew: true,
+    relatedSlugs: ["jikoo2"],
+  },
+  {
+    id: "55",
+    slug: "jikoo2",
+    name: "Серая короткая худи «Клыки зверя»",
+    brand: "jikoo",
+    category: "hoodies",
+    price: 5500,
+    images: [
+      "/products/jikoo2/1.webp",
+      "/products/jikoo2/2.webp",
+      "/products/jikoo2/3.webp",
+      "/products/jikoo2/4.webp",
+      "/products/jikoo2/5.webp",
+    ],
+    sizes: ["S", "M", "L"],
+    colors: [{ name: "Серый", hex: "#6b7280" }],
+    description:
+      "Серая короткая худи JIKOO «Клыки зверя».\n\nПараметры модели:\n• Рост: 168 см, объемы 76/56/85 см, размер на модели M\n\nСостав:\n• 95% хлопок, 5% полиэстер",
+    longImages: [
+      "/products/jikoo2/desc_1.webp",
+      "/products/jikoo2/desc_2.webp",
+      "/products/jikoo2/desc_3.webp",
+      "/products/jikoo2/desc_4.webp",
+      "/products/jikoo2/desc_5.webp",
+      "/products/jikoo2/desc_6.webp",
+      "/products/jikoo2/desc_7.webp",
+      "/products/jikoo2/desc_8.webp",
+      "/products/jikoo2/desc_9.webp",
+      "/products/jikoo2/desc_10.webp",
+      "/products/jikoo2/desc_11.webp",
+      "/products/jikoo2/desc_12.webp",
+      "/products/jikoo2/desc_13.webp",
+      "/products/jikoo2/desc_14.webp",
+      "/products/jikoo2/desc_15.webp",
+      "/products/jikoo2/desc_16.webp",
+      "/products/jikoo2/desc_17.webp",
+      "/products/jikoo2/desc_18.webp",
+      "/products/jikoo2/desc_19.webp",
+      "/products/jikoo2/desc_20.webp",
+      "/products/jikoo2/desc_21.webp",
+      "/products/jikoo2/desc_22.webp",
+      "/products/jikoo2/desc_23.webp",
+      "/products/jikoo2/desc_24.webp",
+    ],
+    isNew: true,
+    relatedSlugs: ["jikoo1"],
   },
 ];
