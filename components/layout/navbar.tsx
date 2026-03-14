@@ -57,7 +57,7 @@ export function Navbar() {
         >
           <span className="relative h-8 w-8 md:h-10 md:w-10">
             <Image
-              src="/logo.webp"
+              src="/logo.webp?v=2"
               alt="WhyBao"
               fill
               sizes="40px"

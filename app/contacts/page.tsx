@@ -27,7 +27,7 @@ export default function ContactsPage() {
         <div className="mb-8 flex flex-col items-center gap-4 sm:flex-row sm:items-start sm:gap-6">
           <div className="relative h-24 w-24 shrink-0 sm:h-28 sm:w-28">
             <Image
-              src="/logo.webp"
+              src="/logo.webp?v=2"
               alt="WhyBao"
               fill
               className="object-contain"
