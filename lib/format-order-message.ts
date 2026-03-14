@@ -15,31 +15,57 @@ export interface OrderCustomer {
   promoDisplay?: string;
 }
 
+const rub = (n: number) => n.toLocaleString("ru-RU") + " ₽";
+
 export function formatOrderMessage(
   orderId: string,
   items: OrderItem[],
   total: number,
   customer: OrderCustomer
 ): string {
-  const lines = [
-    "🛒 Заказ " + orderId,
-    "",
-    "📦 Товары:",
-    ...items.map(
-      (i) =>
-        `• ${i.name} (${i.size}, ${i.color}) — ${i.price.toLocaleString("ru-RU")} ₽ × ${i.quantity}`
-    ),
-    "",
-    ...(customer.promoDisplay ? [`Промокод: ${customer.promoDisplay}`] : []),
-    "💰 Итого: " + total.toLocaleString("ru-RU") + " ₽",
-    "",
-    "👤 Клиент:",
-    `ФИО: ${customer.name}`,
-    `Телефон: ${customer.phone}`,
-    `Telegram: @${customer.telegram.replace(/^@/, "")}`,
-    `Город: ${customer.address}`,
-    customer.comment ? `Комментарий: ${customer.comment}` : null,
-  ].filter(Boolean);
+  const tg = customer.telegram.replace(/^@/, "");
+  const lines: string[] = [];
+
+  lines.push("═══════════════════════");
+  lines.push("  НОВЫЙ ЗАКАЗ  " + orderId);
+  lines.push("═══════════════════════");
+  lines.push("");
+
+  lines.push("👤 КОНТАКТЫ КЛИЕНТА");
+  lines.push("ФИО: " + customer.name);
+  lines.push("Телефон: " + customer.phone);
+  lines.push("Telegram: @" + tg);
+  if (customer.address.trim()) {
+    lines.push("Город: " + customer.address.trim());
+  }
+  lines.push("");
+
+  lines.push("📦 ТОВАРЫ");
+  items.forEach((i, idx) => {
+    const sum = i.price * i.quantity;
+    lines.push(
+      `${idx + 1}. ${i.name}`
+    );
+    lines.push(
+      `   ${i.size}, ${i.color} · ${rub(i.price)} × ${i.quantity} = ${rub(sum)}`
+    );
+  });
+  lines.push("");
+
+  if (customer.promoDisplay) {
+    lines.push("🏷 Промокод: " + customer.promoDisplay);
+    lines.push("");
+  }
+
+  lines.push("───────────────────────");
+  lines.push("💰 ИТОГО: " + rub(total));
+  lines.push("───────────────────────");
+
+  if (customer.comment.trim()) {
+    lines.push("");
+    lines.push("💬 Комментарий клиента:");
+    lines.push(customer.comment.trim());
+  }
 
   return lines.join("\n");
 }

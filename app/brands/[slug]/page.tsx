@@ -21,14 +21,14 @@ export async function generateMetadata(
   const brand = brands.find((b) => b.slug === slug);
   if (!brand) {
     return {
-      title: "Бренд не найден — WhyBao",
+      title: "Бренд не найден - WhyBao",
     };
   }
   return {
-    title: `${brand.name} — бренд в WhyBao`,
+    title: `${brand.name} - бренд в WhyBao`,
     description: `Товары бренда ${brand.name} в магазине WhyBao: streetwear и casual с азиатским вайбом.`,
     openGraph: {
-      title: `${brand.name} — бренд в WhyBao`,
+      title: `${brand.name} - бренд в WhyBao`,
       description: `Подборка вещей бренда ${brand.name} на WhyBao.`,
       images: ["/og-default.png"],
     },
@@ -65,9 +65,17 @@ export default async function BrandPage({ params }: Props) {
       </div>
 
       {products.length === 0 && (
-        <p className="py-12 text-center text-muted-foreground">
-          В этой категории пока нет товаров.
-        </p>
+        <div className="flex flex-col items-center gap-4 py-12">
+          <p className="text-center text-muted-foreground">
+            В этой категории пока нет товаров.
+          </p>
+          <Link
+            href="/shop"
+            className="inline-flex h-9 items-center justify-center bg-primary px-4 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+          >
+            В каталог
+          </Link>
+        </div>
       )}
     </div>
   );

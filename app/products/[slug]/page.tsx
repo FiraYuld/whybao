@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, notFound } from "next/navigation";
 import { Heart, ShoppingCart, ArrowUp, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getProductBySlug, getSetProducts } from "@/lib/product-utils";
@@ -29,6 +29,7 @@ export default function ProductPage() {
   );
   const [imageIndex, setImageIndex] = useState(0);
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageError, setImageError] = useState(false);
   const [loadedLongIndexes, setLoadedLongIndexes] = useState<Set<number>>(new Set());
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [cartJustAdded, setCartJustAdded] = useState(false);
@@ -68,9 +69,10 @@ export default function ProductPage() {
     return () => clearInterval(interval);
   }, [displayProduct]);
 
-  // Сбрасываем «загружено» при смене слайда, чтобы показать скелетон
+  // Сбрасываем «загружено» и ошибку при смене слайда
   useEffect(() => {
     setImageLoaded(false);
+    setImageError(false);
   }, [imageIndex]);
 
   // Предзагрузка следующего и предыдущего фото для плавного автоскролла
@@ -111,14 +113,7 @@ export default function ProductPage() {
   };
 
   if (!product || !displayProduct) {
-    return (
-      <div className="container mx-auto px-4 py-16 text-center">
-        <h1 className="text-2xl font-bold">Товар не найден</h1>
-        <Link href="/shop" className="mt-4 inline-block text-primary hover:underline">
-          Вернуться в каталог
-        </Link>
-      </div>
-    );
+    notFound();
   }
 
   const brandName = brands.find((b) => b.slug === displayProduct.brand)?.name ?? displayProduct.brand;
@@ -175,6 +170,11 @@ export default function ProductPage() {
                 transition={{ duration: 0.25 }}
                 className="absolute inset-0"
               >
+                {imageError ? (
+                <div className="flex flex-col items-center justify-center gap-2 bg-muted p-8 text-muted-foreground">
+                  Фото недоступно
+                </div>
+              ) : (
                 <Image
                   src={displayProduct.images[imageIndex]}
                   alt={displayProduct.name}
@@ -184,7 +184,9 @@ export default function ProductPage() {
                   priority
                   sizes="(max-width: 1024px) 100vw, 50vw"
                   onLoad={() => setImageLoaded(true)}
+                  onError={() => setImageError(true)}
                 />
+              )}
               </motion.div>
             </AnimatePresence>
           </div>
@@ -194,6 +196,7 @@ export default function ProductPage() {
                 key={i}
                 type="button"
                 onClick={() => setImageIndex(i)}
+                aria-label={`Фото ${i + 1}`}
                 className={`relative h-20 w-20 shrink-0 overflow-hidden border-2 transition-colors ${
                   imageIndex === i ? "border-primary" : "border-transparent"
                 }`}

@@ -55,10 +55,16 @@ export function FilterSidebar({
   const [localPriceMax, setLocalPriceMax] = useState(
     priceMax?.toString() ?? ""
   );
+  const [priceError, setPriceError] = useState("");
 
   const applyPrice = () => {
     const min = localPriceMin ? parseInt(localPriceMin, 10) : null;
     const max = localPriceMax ? parseInt(localPriceMax, 10) : null;
+    if (min != null && max != null && min > max) {
+      setPriceError("Минимальная цена не может быть больше максимальной");
+      return;
+    }
+    setPriceError("");
     setPriceRange(min, max);
   };
 
@@ -81,22 +87,31 @@ export function FilterSidebar({
         <h4 className="mb-2 text-sm font-medium">Цена, ₽</h4>
         <div className="flex gap-2">
           <Input
+            id="filter-price-min"
             type="number"
             placeholder="От"
             value={localPriceMin}
             onChange={(e) => setLocalPriceMin(e.target.value)}
             onBlur={applyPrice}
             className="h-8"
+            aria-invalid={!!priceError}
           />
           <Input
+            id="filter-price-max"
             type="number"
             placeholder="До"
             value={localPriceMax}
             onChange={(e) => setLocalPriceMax(e.target.value)}
             onBlur={applyPrice}
             className="h-8"
+            aria-invalid={!!priceError}
           />
         </div>
+        {priceError && (
+          <p className="mt-1 text-xs text-destructive" role="alert">
+            {priceError}
+          </p>
+        )}
       </div>
 
       <div>
@@ -198,7 +213,7 @@ export function FilterSidebar({
         >
           <div className="mb-4 flex items-center justify-between lg:hidden">
             <h2 className="font-semibold">Фильтры</h2>
-            <Button variant="ghost" size="icon" onClick={onClose}>
+            <Button variant="ghost" size="icon" onClick={onClose} aria-label="Закрыть фильтры">
               <X className="size-5" />
             </Button>
           </div>

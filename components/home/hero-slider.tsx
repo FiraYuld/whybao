@@ -5,13 +5,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 
-/** Слайды: image — путь из public (положите 1.webp, 2.webp, 3.webp в public/hero/); иначе показывается градиент */
+/** Слайды: пока только градиенты; чтобы добавить фото, положите 1.webp, 2.webp, 3.webp в public/hero/ и задайте image в каждом слайде */
 const slides = [
   {
     id: 1,
     title: "Why not Bao?",
     subtitle: "Тренды из Китая для тебя",
-    image: "/hero/1.webp",
+    image: undefined as string | undefined,
     background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)",
     cta: "Смотреть новинки",
     href: "/shop?sort=newest",
@@ -20,7 +20,7 @@ const slides = [
     id: 2,
     title: "Streetwear с китайским вайбом",
     subtitle: "Уникальные вещи для Gen Z",
-    image: "/hero/2.webp",
+    image: undefined as string | undefined,
     background: "linear-gradient(135deg, #2d1b4e 0%, #1a0a2e 50%, #0d0221 100%)",
     cta: "В каталог",
     href: "/shop",
@@ -29,7 +29,7 @@ const slides = [
     id: 3,
     title: "Новая коллекция Girlyhalo",
     subtitle: "Куртки и пальто на каждый день",
-    image: "/hero/3.webp",
+    image: undefined as string | undefined,
     background: "linear-gradient(135deg, #1e3a5f 0%, #0d2137 50%, #051a2d 100%)",
     cta: "Смотреть бренд",
     href: "/brands/girlyhalo",
