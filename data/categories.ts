@@ -8,6 +8,7 @@ export const categories = [
   { id: "skirts", name: "Юбки", slug: "skirts" },
   { id: "coats", name: "Пальто / куртки", slug: "coats" },
   { id: "accessories", name: "Аксессуары", slug: "accessories" },
+  { id: "shoes", name: "Обувь", slug: "shoes" },
   { id: "plus-size", name: "Plus size", slug: "plus-size" },
 ] as const;
 

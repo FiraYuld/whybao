@@ -1,7 +1,7 @@
 import { products, type Product } from "@/data/products";
 import { useFilterStore } from "@/lib/store/filter-store";
 
-const VISIBLE_PRODUCTS = products.filter((p) => p.category !== "shoes");
+const VISIBLE_PRODUCTS = products;
 const LETTER_SIZES = ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL"];
 const normalizeSize = (s: string) => s.toUpperCase();
 

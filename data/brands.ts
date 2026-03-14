@@ -6,6 +6,9 @@ export const brands = [
   { id: "betweenand", name: "BETWEENAND", slug: "betweenand" },
   { id: "unifree", name: "UNIFREE", slug: "unifree" },
   { id: "weekendhub", name: "weekendhub", slug: "weekendhub" },
+  { id: "oldorder", name: "OLDORDER", slug: "oldorder" },
+  { id: "echosta", name: "ECHOSTA", slug: "echosta" },
+  { id: "ariseism", name: "Ariseism", slug: "ariseism" },
 ] as const;
 
 export type BrandSlug = (typeof brands)[number]["slug"];
