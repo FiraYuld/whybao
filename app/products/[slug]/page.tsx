@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { Heart, ShoppingCart, ArrowUp } from "lucide-react";
+import { Heart, ShoppingCart, ArrowUp, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getProductBySlug, getSetProducts } from "@/lib/product-utils";
 import { brands } from "@/data/brands";
@@ -31,6 +31,7 @@ export default function ProductPage() {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [loadedLongIndexes, setLoadedLongIndexes] = useState<Set<number>>(new Set());
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const [cartJustAdded, setCartJustAdded] = useState(false);
 
   // При смене товара (slug) сбрасываем карусель и выбор
   useEffect(() => {
@@ -125,7 +126,7 @@ export default function ProductPage() {
   const canAddToCart = !unavailableSizes.includes(selectedSize);
 
   const handleAddToCart = () => {
-    if (!canAddToCart) return;
+    if (!canAddToCart || cartJustAdded) return;
     addItem({
       productId: displayProduct.id,
       slug: displayProduct.slug,
@@ -135,6 +136,8 @@ export default function ProductPage() {
       size: selectedSize,
       color: selectedColor,
     });
+    setCartJustAdded(true);
+    setTimeout(() => setCartJustAdded(false), 1800);
   };
 
   const handleSetPartClick = (targetSlug: string) => {
@@ -306,12 +309,33 @@ export default function ProductPage() {
           <div className="mt-8 flex gap-3">
             <Button
               size="lg"
-              className="flex-1"
+              className={`flex-1 ${cartJustAdded ? "bg-emerald-600 text-white hover:bg-emerald-600" : ""}`}
               onClick={handleAddToCart}
-              disabled={!canAddToCart}
+              disabled={!canAddToCart || cartJustAdded}
             >
-              <ShoppingCart className="mr-2 size-5" />
-              {canAddToCart ? "В корзину" : "Выберите размер"}
+              <AnimatePresence mode="wait">
+                {cartJustAdded ? (
+                  <motion.span
+                    key="done"
+                    initial={{ scale: 0.5, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    exit={{ scale: 0.8, opacity: 0 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                    className="inline-flex items-center gap-2"
+                  >
+                    <Check className="size-5" strokeWidth={2.5} />
+                    Добавлено
+                  </motion.span>
+                ) : (
+                  <motion.span
+                    key="cart"
+                    className="inline-flex items-center gap-2"
+                  >
+                    <ShoppingCart className="size-5" />
+                    {canAddToCart ? "В корзину" : "Выберите размер"}
+                  </motion.span>
+                )}
+              </AnimatePresence>
             </Button>
             <Button
               size="lg"

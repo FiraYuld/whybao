@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useFilterStore, type SortOption } from "@/lib/store/filter-store";
 import { brands } from "@/data/brands";
-import { categories } from "@/data/categories";
+import { getCategoriesWithProducts } from "@/lib/product-utils";
 import { X, RotateCcw } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -137,7 +137,7 @@ export function FilterSidebar({
       <div>
         <h4 className="mb-2 text-sm font-medium">Категория</h4>
         <div className="max-h-40 space-y-1.5 overflow-y-auto">
-          {categories.map((c) => (
+          {getCategoriesWithProducts().map((c) => (
             <label
               key={c.id}
               className="flex cursor-pointer items-center gap-2"

@@ -8,7 +8,7 @@ import { Search, Heart, Menu, X } from "lucide-react";
 import { CartDrawer } from "@/components/cart/cart-drawer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { categories } from "@/data/categories";
+import { getCategoriesWithProducts } from "@/lib/product-utils";
 import { brands } from "@/data/brands";
 import { cn } from "@/lib/utils";
 
@@ -107,7 +107,7 @@ export function Navbar() {
                 categoriesOpen ? "block" : "hidden group-hover:block"
               )}
             >
-              {categories.map((c) => (
+              {getCategoriesWithProducts().map((c) => (
                 <Link
                   key={c.id}
                   href={`/shop?category=${c.slug}`}
@@ -239,7 +239,7 @@ export function Navbar() {
               <p className="px-3 py-1 text-xs font-semibold text-muted-foreground">
                 Категории
               </p>
-              {categories.map((c) => (
+              {getCategoriesWithProducts().map((c) => (
                 <Link
                   key={c.id}
                   href={`/shop?category=${c.slug}`}

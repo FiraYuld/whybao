@@ -1,11 +1,11 @@
 import Link from "next/link";
 import { HeroSlider } from "@/components/home/hero-slider";
 import { ProductCard } from "@/components/catalog/product-card";
-import { categories } from "@/data/categories";
-import { getCatalogPreview } from "@/lib/product-utils";
+import { getCatalogPreview, getCategoryCoverImage, getCategoriesWithProducts } from "@/lib/product-utils";
 
 export default function HomePage() {
-  const catalogPreview = getCatalogPreview(14);
+  const catalogPreview = getCatalogPreview(16);
+  const categoriesWithProducts = getCategoriesWithProducts();
 
   return (
     <div>
@@ -14,24 +14,31 @@ export default function HomePage() {
       <section className="container mx-auto px-4 py-8">
         <h2 className="mb-4 font-accent text-2xl font-bold">Категории</h2>
         <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-          {categories.map((c, i) => (
-            <Link
-              key={c.id}
-              href={`/shop?category=${c.slug}`}
-              className="group relative aspect-[3/4] overflow-hidden border bg-muted"
-            >
-              <div
-                className="absolute inset-0 bg-cover bg-center transition-transform duration-300 group-hover:scale-105"
-                style={{
-                  backgroundImage: `url(https://picsum.photos/seed/cat${i}/400/300)`,
-                }}
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
-              <span className="absolute bottom-0 left-0 right-0 p-3 font-sans text-sm font-semibold tracking-wide text-white md:text-base">
-                {c.name}
-              </span>
-            </Link>
-          ))}
+          {categoriesWithProducts.map((c) => {
+            const coverImage = getCategoryCoverImage(c.slug);
+            return (
+              <Link
+                key={c.id}
+                href={`/shop?category=${c.slug}`}
+                className="group relative aspect-[3/4] overflow-hidden border bg-muted"
+              >
+                <div
+                  className="absolute inset-0 bg-cover bg-center transition-transform duration-300 group-hover:scale-105"
+                  style={
+                    coverImage
+                      ? { backgroundImage: `url(${coverImage})` }
+                      : {
+                          background: `linear-gradient(145deg, hsl(var(--primary) / 0.4) 0%, hsl(var(--muted-foreground) / 0.2) 100%)`,
+                        }
+                  }
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+                <span className="absolute bottom-0 left-0 right-0 p-3 font-sans text-sm font-semibold tracking-wide text-white md:text-base">
+                  {c.name}
+                </span>
+              </Link>
+            );
+          })}
         </div>
       </section>
 

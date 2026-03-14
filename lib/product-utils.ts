@@ -1,7 +1,15 @@
+import { categories } from "@/data/categories";
 import { products, type Product } from "@/data/products";
 import { useFilterStore } from "@/lib/store/filter-store";
 
 const VISIBLE_PRODUCTS = products;
+
+/** Категории, в которых есть хотя бы один товар (для меню и главной) */
+export function getCategoriesWithProducts() {
+  return categories.filter((c) =>
+    VISIBLE_PRODUCTS.some((p) => p.category === c.slug)
+  );
+}
 const LETTER_SIZES = ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL"];
 const normalizeSize = (s: string) => s.toUpperCase();
 
@@ -113,4 +121,14 @@ export function getBestsellers(limit = 8): Product[] {
 
 export function getCatalogPreview(limit = 14): Product[] {
   return VISIBLE_PRODUCTS.slice(0, limit);
+}
+
+/** Для карточки категории на главной: одна случайная картинка из карусели (1–5) случайного товара этой категории */
+export function getCategoryCoverImage(categorySlug: string): string | null {
+  const inCategory = VISIBLE_PRODUCTS.filter((p) => p.category === categorySlug);
+  if (inCategory.length === 0) return null;
+  const product = inCategory[Math.floor(Math.random() * inCategory.length)];
+  const carousel = product.images.slice(0, 5);
+  if (carousel.length === 0) return null;
+  return carousel[Math.floor(Math.random() * carousel.length)];
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useCartStore } from "@/lib/store/cart-store";
@@ -10,6 +10,42 @@ import { formatOrderMessage } from "@/lib/format-order-message";
 
 const TELEGRAM_MANAGER_USERNAME = "whybaoceo";
 const MIN_ORDER_SUM = 5000;
+const CHECKOUT_STORAGE_KEY = "whybao-checkout-form";
+
+type CheckoutFormCache = {
+  name: string;
+  phone: string;
+  telegram: string;
+  address: string;
+  comment: string;
+};
+
+function loadCheckoutCache(): Partial<CheckoutFormCache> {
+  if (typeof window === "undefined") return {};
+  try {
+    const raw = window.localStorage.getItem(CHECKOUT_STORAGE_KEY);
+    if (!raw) return {};
+    const data = JSON.parse(raw) as Partial<CheckoutFormCache>;
+    return {
+      name: typeof data.name === "string" ? data.name : "",
+      phone: typeof data.phone === "string" ? data.phone : "",
+      telegram: typeof data.telegram === "string" ? data.telegram : "",
+      address: typeof data.address === "string" ? data.address : "",
+      comment: typeof data.comment === "string" ? data.comment : "",
+    };
+  } catch {
+    return {};
+  }
+}
+
+function saveCheckoutCache(data: CheckoutFormCache) {
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.setItem(CHECKOUT_STORAGE_KEY, JSON.stringify(data));
+  } catch {
+    // ignore quota or private mode
+  }
+}
 
 const PROMO_CODES: { code: string; discountPercent: number; maxDiscount?: number }[] = [
   { code: "сонный", discountPercent: 5, maxDiscount: 500 },
@@ -44,6 +80,24 @@ export default function CheckoutPage() {
   const [errorField, setErrorField] = useState<"name" | "phone" | "telegram" | null>(null);
   const [isSending, setIsSending] = useState(false);
   const [toast, setToast] = useState("");
+  const [cacheLoaded, setCacheLoaded] = useState(false);
+
+  // Восстановление данных из localStorage при открытии страницы
+  useEffect(() => {
+    const cached = loadCheckoutCache();
+    if (cached.name !== undefined) setName(cached.name);
+    if (cached.phone !== undefined) setPhone(cached.phone);
+    if (cached.telegram !== undefined) setTelegram(cached.telegram);
+    if (cached.address !== undefined) setAddress(cached.address);
+    if (cached.comment !== undefined) setComment(cached.comment);
+    setCacheLoaded(true);
+  }, []);
+
+  // Сохранение в localStorage при изменении полей (после первой загрузки)
+  useEffect(() => {
+    if (!cacheLoaded) return;
+    saveCheckoutCache({ name, phone, telegram, address, comment });
+  }, [cacheLoaded, name, phone, telegram, address, comment]);
 
   const discountAmount = appliedPromo
     ? Math.min(

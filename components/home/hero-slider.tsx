@@ -5,12 +5,14 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 
+/** Слайды: image — путь из public (положите 1.webp, 2.webp, 3.webp в public/hero/); иначе показывается градиент */
 const slides = [
   {
     id: 1,
     title: "Why not Bao?",
     subtitle: "Тренды из Китая для тебя",
-    image: "https://picsum.photos/seed/whybao-hero1/1920/800",
+    image: "/hero/1.webp",
+    background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)",
     cta: "Смотреть новинки",
     href: "/shop?sort=newest",
   },
@@ -18,7 +20,8 @@ const slides = [
     id: 2,
     title: "Streetwear с китайским вайбом",
     subtitle: "Уникальные вещи для Gen Z",
-    image: "https://picsum.photos/seed/whybao-hero2/1920/800",
+    image: "/hero/2.webp",
+    background: "linear-gradient(135deg, #2d1b4e 0%, #1a0a2e 50%, #0d0221 100%)",
     cta: "В каталог",
     href: "/shop",
   },
@@ -26,7 +29,8 @@ const slides = [
     id: 3,
     title: "Новая коллекция Girlyhalo",
     subtitle: "Куртки и пальто на каждый день",
-    image: "https://picsum.photos/seed/whybao-hero3/1920/800",
+    image: "/hero/3.webp",
+    background: "linear-gradient(135deg, #1e3a5f 0%, #0d2137 50%, #051a2d 100%)",
     cta: "Смотреть бренд",
     href: "/brands/girlyhalo",
   },
@@ -56,7 +60,11 @@ export function HeroSlider() {
         >
           <div
             className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: `url(${slides[current].image})` }}
+            style={
+              slides[current].image
+                ? { backgroundImage: `url(${slides[current].image})` }
+                : { background: slides[current].background }
+            }
           />
           <div className="absolute inset-0 bg-gradient-to-r from-background/90 via-background/50 to-transparent" />
           <div className="relative flex h-full flex-col justify-center px-4 md:px-8 lg:px-16">

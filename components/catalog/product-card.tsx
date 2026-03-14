@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { Heart, ShoppingCart } from "lucide-react";
+import { Heart, ShoppingCart, Check } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { useCartStore } from "@/lib/store/cart-store";
@@ -33,6 +33,7 @@ export function ProductCard({ product, onQuickAdd, index = 0 }: ProductCardProps
 
   const [imageIndex, setImageIndex] = useState(0);
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [justAdded, setJustAdded] = useState(false);
 
   useEffect(() => {
     if (product.images.length <= 1) return;
@@ -62,6 +63,7 @@ export function ProductCard({ product, onQuickAdd, index = 0 }: ProductCardProps
 
   const handleQuickAdd = (e: React.MouseEvent) => {
     e.preventDefault();
+    if (justAdded) return;
     const size = product.sizes[0];
     const color = product.colors[0]?.name ?? "Чёрный";
     addItem({
@@ -73,6 +75,8 @@ export function ProductCard({ product, onQuickAdd, index = 0 }: ProductCardProps
       size,
       color,
     });
+    setJustAdded(true);
+    setTimeout(() => setJustAdded(false), 1800);
     onQuickAdd?.(product);
   };
 
@@ -134,11 +138,38 @@ export function ProductCard({ product, onQuickAdd, index = 0 }: ProductCardProps
           <div className="absolute inset-x-0 bottom-0 translate-y-full bg-background/95 p-2 transition-transform duration-300 group-hover:translate-y-0">
             <Button
               size="sm"
-              className="w-full"
+              className={cn(
+                "w-full transition-colors",
+                justAdded && "bg-emerald-600 text-white hover:bg-emerald-600"
+              )}
               onClick={handleQuickAdd}
+              disabled={justAdded}
             >
-              <ShoppingCart className="mr-1 size-4" />
-              В корзину
+              <AnimatePresence mode="wait">
+                {justAdded ? (
+                  <motion.span
+                    key="done"
+                    initial={{ scale: 0.5, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    exit={{ scale: 0.8, opacity: 0 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                    className="inline-flex items-center gap-1.5"
+                  >
+                    <Check className="size-4" strokeWidth={2.5} />
+                    Добавлено
+                  </motion.span>
+                ) : (
+                  <motion.span
+                    key="cart"
+                    initial={{ scale: 1 }}
+                    animate={{ scale: 1 }}
+                    className="inline-flex items-center gap-1.5"
+                  >
+                    <ShoppingCart className="size-4" />
+                    В корзину
+                  </motion.span>
+                )}
+              </AnimatePresence>
             </Button>
           </div>
         </div>
