@@ -6,38 +6,21 @@ import Link from "next/link";
 import { useCartStore } from "@/lib/store/cart-store";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { formatOrderMessage } from "@/lib/format-order-message";
 
-const TELEGRAM_USERNAME = "FiraYuld";
+const TELEGRAM_MANAGER_USERNAME = "whybaoceo";
+const MIN_ORDER_SUM = 5000;
+
+const PROMO_CODES: { code: string; discountPercent: number; maxDiscount?: number }[] = [
+  { code: "сонный", discountPercent: 5, maxDiscount: 500 },
+];
 
 function generateOrderId() {
-  return `WB-${Date.now().toString(36).toUpperCase()}`;
+  return `why_${Date.now().toString(36).toLowerCase()}`;
 }
 
-function buildTelegramMessage(
-  orderId: string,
-  items: { name: string; size: string; color: string; price: number; quantity: number }[],
-  total: number,
-  customer: { name: string; phone: string; address: string; comment: string }
-) {
-  const lines = [
-    "🛒 Заказ " + orderId,
-    "",
-    "📦 Товары:",
-    ...items.map(
-      (i) =>
-        `• ${i.name} (${i.size}, ${i.color}) — ${i.price.toLocaleString("ru-RU")} ₽ × ${i.quantity}`
-    ),
-    "",
-    "💰 Итого: " + total.toLocaleString("ru-RU") + " ₽",
-    "",
-    "👤 Клиент:",
-    `Имя: ${customer.name}`,
-    `Телефон: ${customer.phone}`,
-    `Адрес: ${customer.address}`,
-    customer.comment ? `Комментарий: ${customer.comment}` : null,
-  ].filter(Boolean);
-
-  return lines.join("\n");
+function telegramChatUrl(text: string) {
+  return `https://t.me/${TELEGRAM_MANAGER_USERNAME}?text=${encodeURIComponent(text)}`;
 }
 
 export default function CheckoutPage() {
@@ -48,12 +31,39 @@ export default function CheckoutPage() {
 
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
+  const [telegram, setTelegram] = useState("");
   const [address, setAddress] = useState("");
   const [comment, setComment] = useState("");
+  const [promoInput, setPromoInput] = useState("");
+  const [appliedPromo, setAppliedPromo] = useState<{
+    code: string;
+    discountPercent: number;
+    maxDiscount?: number;
+  } | null>(null);
   const [error, setError] = useState("");
-  const [errorField, setErrorField] = useState<"name" | "phone" | null>(null);
+  const [errorField, setErrorField] = useState<"name" | "phone" | "telegram" | null>(null);
   const [isSending, setIsSending] = useState(false);
   const [toast, setToast] = useState("");
+
+  const discountAmount = appliedPromo
+    ? Math.min(
+        Math.round(totalPrice * (appliedPromo.discountPercent / 100)),
+        appliedPromo.maxDiscount ?? Infinity
+      )
+    : 0;
+  const finalTotal = totalPrice - discountAmount;
+
+  const applyPromo = () => {
+    const normalized = promoInput.trim().toLowerCase();
+    const promo = PROMO_CODES.find((p) => p.code.toLowerCase() === normalized);
+    if (promo) {
+      setAppliedPromo(promo);
+      setError("");
+    } else {
+      setAppliedPromo(null);
+      setError("Промокод не найден");
+    }
+  };
 
   if (items.length === 0) {
     return (
@@ -69,13 +79,18 @@ export default function CheckoutPage() {
     );
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     setErrorField(null);
 
+    if (finalTotal < MIN_ORDER_SUM) {
+      setError(`Минимальная сумма заказа — ${MIN_ORDER_SUM.toLocaleString("ru-RU")} ₽`);
+      setErrorField(null);
+      return;
+    }
     if (!name.trim()) {
-      setError("Укажите имя");
+      setError("Укажите ФИО");
       setErrorField("name");
       return;
     }
@@ -84,34 +99,68 @@ export default function CheckoutPage() {
       setErrorField("phone");
       return;
     }
+    const telegramTrimmed = telegram.replace(/^@/, "").trim();
+    if (!telegramTrimmed) {
+      setError("Укажите Telegram (ник без @)");
+      setErrorField("telegram");
+      return;
+    }
 
     if (isSending) return;
     setIsSending(true);
 
     const orderId = generateOrderId();
-    const message = buildTelegramMessage(
+    const payload = {
       orderId,
-      items.map((i) => ({
+      items: items.map((i) => ({
         name: i.name,
         size: i.size,
         color: i.color,
         price: i.price,
         quantity: i.quantity,
       })),
-      totalPrice,
-      { name: name.trim(), phone: phone.trim(), address: address.trim(), comment: comment.trim() }
+      total: finalTotal,
+      customer: {
+        name: name.trim(),
+        phone: phone.trim(),
+        telegram: telegramTrimmed,
+        address: address.trim(),
+        comment: comment.trim(),
+        promoDisplay: appliedPromo ? `${appliedPromo.code} (−${discountAmount.toLocaleString("ru-RU")} ₽)` : undefined,
+      },
+    };
+    const fullMessage = formatOrderMessage(
+      orderId,
+      payload.items,
+      payload.total,
+      payload.customer
     );
 
-    const url = `https://t.me/${TELEGRAM_USERNAME}?text=${encodeURIComponent(message)}`;
-    window.open(url, "_blank");
+    try {
+      const res = await fetch("/api/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
 
-    setToast("Мы открыли чат в Telegram. Если окно не появилось — проверь вкладки браузера.");
-    setTimeout(() => {
-      setToast("");
-      setIsSending(false);
-      clearCart();
-      router.push("/checkout/success");
-    }, 2000);
+      if (res.ok) {
+        clearCart();
+        const shortMessage = `Здравствуйте! Хочу подтвердить заказ и уточнить детали.\n\nНомер заказа: ${orderId}`;
+        window.open(telegramChatUrl(shortMessage), "_blank");
+        router.push(`/checkout/success?order=${encodeURIComponent(orderId)}`);
+        return;
+      }
+    } catch {
+      // network or other error
+    }
+
+    // Fallback: open full order in Telegram so user can send manually
+    window.open(telegramChatUrl(fullMessage), "_blank");
+    setToast(
+      "Не удалось отправить автоматически. Открыт чат — отправьте сообщение вручную."
+    );
+    setTimeout(() => setToast(""), 5000);
+    setIsSending(false);
   };
 
   return (
@@ -121,13 +170,13 @@ export default function CheckoutPage() {
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
           <label htmlFor="name" className="block text-sm font-medium">
-            Имя *
+            ФИО *
           </label>
           <Input
             id="name"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            placeholder="Как к вам обращаться"
+            placeholder="Фамилия Имя Отчество"
             className={`mt-1 ${errorField === "name" ? "border-destructive" : ""}`}
             required
           />
@@ -165,21 +214,35 @@ export default function CheckoutPage() {
             className={`mt-1 ${errorField === "phone" ? "border-destructive" : ""}`}
             required
           />
-          <p className="mt-1 text-xs text-muted-foreground">
-            Формат: +7 (999) 123-45-67
-          </p>
+        </div>
+        <div>
+          <label htmlFor="telegram" className="block text-sm font-medium">
+            Telegram *
+          </label>
+          <Input
+            id="telegram"
+            type="text"
+            value={telegram}
+            onChange={(e) => setTelegram(e.target.value.replace(/\s/g, ""))}
+            placeholder="@username"
+            className={`mt-1 ${errorField === "telegram" ? "border-destructive" : ""}`}
+            required
+          />
         </div>
         <div>
           <label htmlFor="address" className="block text-sm font-medium">
-            Город / Адрес
+            Город
           </label>
           <Input
             id="address"
             value={address}
             onChange={(e) => setAddress(e.target.value)}
-            placeholder="Город, улица, дом, квартира"
+            placeholder="Город доставки"
             className="mt-1"
           />
+          <p className="mt-1 text-xs text-muted-foreground">
+            Подробный адрес обсудим в чате с менеджером
+          </p>
         </div>
         <div>
           <label htmlFor="comment" className="block text-sm font-medium">
@@ -195,20 +258,63 @@ export default function CheckoutPage() {
           />
         </div>
 
+        <div>
+          <label htmlFor="promo" className="block text-sm font-medium">
+            Промокод
+          </label>
+          <div className="mt-1 flex gap-2">
+            <Input
+              id="promo"
+              type="text"
+              value={promoInput}
+              onChange={(e) => setPromoInput(e.target.value)}
+              placeholder="Введите промокод"
+              className="flex-1"
+            />
+            <Button type="button" onClick={applyPromo}>
+              Применить
+            </Button>
+          </div>
+          {appliedPromo && (
+            <p className="mt-1 text-sm text-muted-foreground">
+              Промокод «{appliedPromo.code}»: −{discountAmount.toLocaleString("ru-RU")} ₽
+            </p>
+          )}
+        </div>
+
         {error && (
           <p className="text-sm text-destructive">{error}</p>
         )}
 
         <div className="rounded-lg border bg-muted/50 p-4">
-          <p className="font-semibold">
-            Итого: {totalPrice.toLocaleString("ru-RU")} ₽
-          </p>
+          {appliedPromo ? (
+            <>
+              <p className="text-sm text-muted-foreground">
+                Сумма: {totalPrice.toLocaleString("ru-RU")} ₽ · Промокод {appliedPromo.code}: −{discountAmount.toLocaleString("ru-RU")} ₽
+              </p>
+              <p className="mt-1 font-semibold">
+                Итого: {finalTotal.toLocaleString("ru-RU")} ₽
+              </p>
+            </>
+          ) : (
+            <p className="font-semibold">
+              Итого: {totalPrice.toLocaleString("ru-RU")} ₽
+            </p>
+          )}
           <p className="mt-1 text-sm text-muted-foreground">
             {items.length} {items.length === 1 ? "товар" : items.length < 5 ? "товара" : "товаров"}
+            {finalTotal < MIN_ORDER_SUM && (
+              <> · Минимум заказа {MIN_ORDER_SUM.toLocaleString("ru-RU")} ₽</>
+            )}
           </p>
         </div>
 
-        <Button type="submit" size="lg" className="w-full" disabled={isSending}>
+        <Button
+          type="submit"
+          size="lg"
+          className="w-full"
+          disabled={isSending || finalTotal < MIN_ORDER_SUM}
+        >
           {isSending ? "Отправляем..." : "Отправить менеджеру в Telegram"}
         </Button>
       </form>

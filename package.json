@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "images:webp": "node scripts/optimize-images.js",
     "dev": "node scripts/dev.js",
     "dev:webpack": "node scripts/dev.js --webpack",
     "dev:simple": "next dev -H 0.0.0.0 --webpack",
@@ -37,6 +38,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
+    "sharp": "^0.33.5",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

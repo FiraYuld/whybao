@@ -9,6 +9,9 @@ const nextConfig: NextConfig = {
         pathname: "/**",
       },
     ],
+    localPatterns: [
+      { pathname: "/logo.webp" },
+    ],
   },
 };
 

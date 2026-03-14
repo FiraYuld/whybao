@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -17,6 +17,25 @@ export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [categoriesOpen, setCategoriesOpen] = useState(false);
+  const [brandsOpen, setBrandsOpen] = useState(false);
+  const navRef = useRef<HTMLElement>(null);
+
+  // Закрыть выпадающие меню при клике вне навбара (важно для iPad/тач)
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent | TouchEvent) => {
+      if (navRef.current && !navRef.current.contains(e.target as Node)) {
+        setCategoriesOpen(false);
+        setBrandsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("touchstart", handleClickOutside, { passive: true });
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+    };
+  }, []);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,15 +46,18 @@ export function Navbar() {
   };
 
   return (
-    <header className="sticky top-0 z-30 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container mx-auto flex h-14 items-center justify-between gap-3 px-4 md:h-16">
+    <header
+      className="sticky top-0 z-30 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
+      style={{ paddingTop: "env(safe-area-inset-top)" }}
+    >
+      <div className="container mx-auto flex h-14 w-full max-w-full items-center justify-between gap-3 px-4 md:h-16">
         <Link
           href="/"
           className="flex items-center gap-1.5 font-accent text-xl font-bold italic md:text-2xl"
         >
           <span className="relative h-8 w-8 md:h-10 md:w-10">
             <Image
-              src="/logo.png"
+              src="/logo.webp?v=2"
               alt="WhyBao"
               fill
               sizes="40px"
@@ -64,21 +86,33 @@ export function Navbar() {
         </form>
 
         {/* Desktop: Nav links */}
-        <nav className="hidden items-center gap-1 lg:flex">
+        <nav ref={navRef} className="hidden items-center gap-1 lg:flex">
           <div className="relative group">
             <button
               type="button"
+              onClick={() => {
+                setCategoriesOpen((v) => !v);
+                setBrandsOpen(false);
+              }}
+              aria-expanded={categoriesOpen}
+              aria-haspopup="true"
               className="flex items-center gap-1 rounded-md px-3 py-2 text-sm font-medium hover:bg-muted"
             >
               Категории
               <span className="text-xs">▼</span>
             </button>
-            <div className="absolute left-0 top-full hidden min-w-[200px] rounded-md border bg-popover p-2 shadow-lg group-hover:block">
+            <div
+              className={cn(
+                "absolute left-0 top-full min-w-[200px] rounded-md border bg-popover p-2 shadow-lg",
+                categoriesOpen ? "block" : "hidden group-hover:block"
+              )}
+            >
               {categories.map((c) => (
                 <Link
                   key={c.id}
                   href={`/shop?category=${c.slug}`}
                   className="block rounded px-2 py-1.5 text-sm hover:bg-muted"
+                  onClick={() => setCategoriesOpen(false)}
                 >
                   {c.name}
                 </Link>
@@ -88,17 +122,29 @@ export function Navbar() {
           <div className="relative group">
             <button
               type="button"
+              onClick={() => {
+                setBrandsOpen((v) => !v);
+                setCategoriesOpen(false);
+              }}
+              aria-expanded={brandsOpen}
+              aria-haspopup="true"
               className="flex items-center gap-1 rounded-md px-3 py-2 text-sm font-medium hover:bg-muted"
             >
               Бренды
               <span className="text-xs">▼</span>
             </button>
-            <div className="absolute left-0 top-full hidden min-w-[200px] rounded-md border bg-popover p-2 shadow-lg group-hover:block">
+            <div
+              className={cn(
+                "absolute left-0 top-full min-w-[200px] rounded-md border bg-popover p-2 shadow-lg",
+                brandsOpen ? "block" : "hidden group-hover:block"
+              )}
+            >
               {brands.map((b) => (
                 <Link
                   key={b.id}
                   href={`/brands/${b.slug}`}
                   className="block rounded px-2 py-1.5 text-sm hover:bg-muted"
+                  onClick={() => setBrandsOpen(false)}
                 >
                   {b.name}
                 </Link>
@@ -113,6 +159,15 @@ export function Navbar() {
             )}
           >
             Каталог
+          </Link>
+          <Link
+            href="/contacts"
+            className={cn(
+              "rounded-md px-3 py-2 text-sm font-medium hover:bg-muted",
+              pathname === "/contacts" && "bg-muted"
+            )}
+          >
+            Контакты
           </Link>
         </nav>
 
@@ -131,9 +186,6 @@ export function Navbar() {
             <Heart className="size-5" />
           </Link>
           <CartDrawer />
-          <Link href="/account" className="p-2 text-foreground hover:text-primary" aria-label="Аккаунт">
-            <span className="text-lg" role="img" aria-hidden>👤</span>
-          </Link>
           <Button
             variant="ghost"
             size="icon"
@@ -167,13 +219,22 @@ export function Navbar() {
       {mobileOpen && (
         <div className="border-t lg:hidden">
           <nav className="flex flex-col gap-1 p-4">
-            <Link
-              href="/shop"
-              onClick={() => setMobileOpen(false)}
-              className="rounded-md px-3 py-2 font-medium hover:bg-muted"
-            >
-              Каталог
-            </Link>
+            <div className="mb-1 flex items-center justify-between">
+              <Link
+                href="/shop"
+                onClick={() => setMobileOpen(false)}
+                className="rounded-md px-3 py-2 font-medium hover:bg-muted"
+              >
+                Каталог
+              </Link>
+              <Link
+                href="/contacts"
+                onClick={() => setMobileOpen(false)}
+                className="inline-flex items-center justify-center rounded-md bg-primary px-3 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+              >
+                Контакты
+              </Link>
+            </div>
             <div className="border-t pt-2">
               <p className="px-3 py-1 text-xs font-semibold text-muted-foreground">
                 Категории

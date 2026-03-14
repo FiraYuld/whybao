@@ -6,7 +6,6 @@ import { Input } from "@/components/ui/input";
 import { useFilterStore, type SortOption } from "@/lib/store/filter-store";
 import { brands } from "@/data/brands";
 import { categories } from "@/data/categories";
-import { products } from "@/data/products";
 import { X, RotateCcw } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -20,9 +19,7 @@ const SORT_OPTIONS: { value: SortOption; label: string }[] = [
 
 const LETTER_SIZES = ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL"];
 
-const allSizes = LETTER_SIZES.filter((s) =>
-  products.some((p) => p.sizes.map((x) => x.toUpperCase()).includes(s))
-);
+const allSizes = LETTER_SIZES;
 
 interface FilterSidebarProps {
   open?: boolean;

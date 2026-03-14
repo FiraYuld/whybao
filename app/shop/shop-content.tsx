@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 import { ProductCard } from "@/components/catalog/product-card";
 import { FilterSidebar } from "@/components/catalog/filter-sidebar";
@@ -16,7 +16,8 @@ const ITEMS_PER_PAGE = 12;
 export function ShopContent() {
   const searchParams = useSearchParams();
   const [filterOpen, setFilterOpen] = useState(false);
-  const [page, setPage] = useState(1);
+  const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
+  const sentinelRef = useRef<HTMLDivElement>(null);
 
   const filters = useFilterStore(
     useShallow((s) => ({
@@ -48,15 +49,29 @@ export function ShopContent() {
     [filters, searchQuery]
   );
 
-  const totalPages = Math.ceil(filteredProducts.length / ITEMS_PER_PAGE);
-  const paginatedProducts = filteredProducts.slice(
-    (page - 1) * ITEMS_PER_PAGE,
-    page * ITEMS_PER_PAGE
-  );
+  const visibleProducts = filteredProducts.slice(0, visibleCount);
+  const hasMore = visibleCount < filteredProducts.length;
 
   useEffect(() => {
-    setPage(1);
+    setVisibleCount(ITEMS_PER_PAGE);
   }, [filters, searchQuery]);
+
+  const loadMore = useCallback(() => {
+    setVisibleCount((prev) => Math.min(prev + ITEMS_PER_PAGE, filteredProducts.length));
+  }, [filteredProducts.length]);
+
+  useEffect(() => {
+    if (!hasMore || !sentinelRef.current) return;
+    const el = sentinelRef.current;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0]?.isIntersecting) loadMore();
+      },
+      { rootMargin: "200px", threshold: 0 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [hasMore, loadMore]);
 
   return (
     <div className="container mx-auto flex flex-col gap-4 px-4 py-6 lg:flex-row">
@@ -88,7 +103,7 @@ export function ShopContent() {
         </div>
 
         <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-          {paginatedProducts.map((p, i) => (
+          {visibleProducts.map((p, i) => (
             <ProductCard key={p.id} product={p} index={i} />
           ))}
         </div>
@@ -99,27 +114,7 @@ export function ShopContent() {
           </p>
         )}
 
-        {totalPages > 1 && (
-          <div className="mt-8 flex justify-center gap-2">
-            <Button
-              variant="outline"
-              disabled={page <= 1}
-              onClick={() => setPage((p) => p - 1)}
-            >
-              Назад
-            </Button>
-            <span className="flex items-center px-4 text-sm">
-              {page} / {totalPages}
-            </span>
-            <Button
-              variant="outline"
-              disabled={page >= totalPages}
-              onClick={() => setPage((p) => p + 1)}
-            >
-              Вперёд
-            </Button>
-          </div>
-        )}
+        {hasMore && <div ref={sentinelRef} className="h-4 w-full" aria-hidden />}
       </div>
     </div>
   );
