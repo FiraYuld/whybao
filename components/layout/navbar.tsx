@@ -187,7 +187,7 @@ export function Navbar() {
               <Link
                 href="/contacts"
                 onClick={() => setMobileOpen(false)}
-                className="inline-flex items-center justify-center rounded-full border border-primary px-3 py-1 text-[11px] font-semibold text-primary hover:bg-primary hover:text-primary-foreground"
+                className="inline-flex items-center justify-center rounded-md bg-primary px-3 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
               >
                 Контакты
               </Link>

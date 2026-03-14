@@ -11,8 +11,8 @@ import { formatOrderMessage } from "@/lib/format-order-message";
 const TELEGRAM_MANAGER_USERNAME = "whybao_s2m";
 const MIN_ORDER_SUM = 5000;
 
-const PROMO_CODES: { code: string; discountPercent: number }[] = [
-  { code: "сонный", discountPercent: 5 },
+const PROMO_CODES: { code: string; discountPercent: number; maxDiscount?: number }[] = [
+  { code: "сонный", discountPercent: 5, maxDiscount: 500 },
 ];
 
 function generateOrderId() {
@@ -35,14 +35,23 @@ export default function CheckoutPage() {
   const [address, setAddress] = useState("");
   const [comment, setComment] = useState("");
   const [promoInput, setPromoInput] = useState("");
-  const [appliedPromo, setAppliedPromo] = useState<{ code: string; discountPercent: number } | null>(null);
+  const [appliedPromo, setAppliedPromo] = useState<{
+    code: string;
+    discountPercent: number;
+    maxDiscount?: number;
+  } | null>(null);
   const [error, setError] = useState("");
   const [errorField, setErrorField] = useState<"name" | "phone" | "telegram" | null>(null);
   const [isSending, setIsSending] = useState(false);
   const [toast, setToast] = useState("");
 
-  const discountPercent = appliedPromo?.discountPercent ?? 0;
-  const finalTotal = Math.round(totalPrice * (1 - discountPercent / 100));
+  const discountAmount = appliedPromo
+    ? Math.min(
+        Math.round(totalPrice * (appliedPromo.discountPercent / 100)),
+        appliedPromo.maxDiscount ?? Infinity
+      )
+    : 0;
+  const finalTotal = totalPrice - discountAmount;
 
   const applyPromo = () => {
     const normalized = promoInput.trim().toLowerCase();
@@ -117,7 +126,7 @@ export default function CheckoutPage() {
         telegram: telegramTrimmed,
         address: address.trim(),
         comment: comment.trim(),
-        promoDisplay: appliedPromo ? `${appliedPromo.code} (−${appliedPromo.discountPercent}%)` : undefined,
+        promoDisplay: appliedPromo ? `${appliedPromo.code} (−${discountAmount.toLocaleString("ru-RU")} ₽)` : undefined,
       },
     };
     const fullMessage = formatOrderMessage(
@@ -136,7 +145,7 @@ export default function CheckoutPage() {
 
       if (res.ok) {
         clearCart();
-        const shortMessage = `Здравствуйте! Оформил заказ ${orderId} на сайте — готов подтвердить.`;
+        const shortMessage = `Здравствуйте! Хочу подтвердить заказ и уточнить детали.\n\nНомер заказа: ${orderId}`;
         window.open(telegramChatUrl(shortMessage), "_blank");
         router.push(`/checkout/success?order=${encodeURIComponent(orderId)}`);
         return;
@@ -262,13 +271,13 @@ export default function CheckoutPage() {
               placeholder="Введите промокод"
               className="flex-1"
             />
-            <Button type="button" variant="outline" onClick={applyPromo}>
+            <Button type="button" onClick={applyPromo}>
               Применить
             </Button>
           </div>
           {appliedPromo && (
             <p className="mt-1 text-sm text-muted-foreground">
-              Промокод «{appliedPromo.code}»: скидка {appliedPromo.discountPercent}%
+              Промокод «{appliedPromo.code}»: −{discountAmount.toLocaleString("ru-RU")} ₽
             </p>
           )}
         </div>
@@ -281,7 +290,7 @@ export default function CheckoutPage() {
           {appliedPromo ? (
             <>
               <p className="text-sm text-muted-foreground">
-                Сумма: {totalPrice.toLocaleString("ru-RU")} ₽ · Промокод {appliedPromo.code}: −{appliedPromo.discountPercent}%
+                Сумма: {totalPrice.toLocaleString("ru-RU")} ₽ · Промокод {appliedPromo.code}: −{discountAmount.toLocaleString("ru-RU")} ₽
               </p>
               <p className="mt-1 font-semibold">
                 Итого: {finalTotal.toLocaleString("ru-RU")} ₽

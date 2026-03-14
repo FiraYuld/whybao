@@ -26,7 +26,7 @@ export default async function CheckoutSuccessPage({
       {typeof orderId === "string" && orderId.trim() && (
         <a
           href={telegramChatUrl(
-            `Здравствуйте! Оформил заказ ${orderId} на сайте — готов подтвердить.`
+            `Здравствуйте! Хочу подтвердить заказ и уточнить детали.\n\nНомер заказа: ${orderId}`
           )}
           target="_blank"
           rel="noopener noreferrer"
