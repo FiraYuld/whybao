@@ -901,12 +901,13 @@ export const products: Product[] = [
       "/products/oldorder3/4.webp",
       "/products/oldorder3/5.webp",
     ],
-    sizes: ["35", "36", "37", "38", "40", "41", "42", "43", "44"],
+    sizes: ["35", "36", "37", "38", "39", "40", "41", "42", "43", "44"],
     colors: [{ name: "Один цвет", hex: "#1a1a1a" }],
     description:
-      "Canvas shoes OLDORDER, коллаборация Chiikawa 2026. Размер 39 отсутствует в наличии.\n\nПараметры модели и состав — см. в карточке товара.",
+      "Canvas shoes OLDORDER, коллаборация Chiikawa 2026.\n\nПараметры модели и состав — см. в карточке товара.",
     longImages: Array.from({ length: 10 }, (_, i) => `/products/oldorder3/desc_${i + 1}.webp`),
     isNew: true,
+    outOfStock: [{ color: "Один цвет", sizes: ["39"] }],
   },
   {
     id: "64",

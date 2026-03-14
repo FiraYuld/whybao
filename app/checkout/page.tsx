@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { formatOrderMessage } from "@/lib/format-order-message";
 
-const TELEGRAM_MANAGER_USERNAME = "whybao_s2m";
+const TELEGRAM_MANAGER_USERNAME = "whybaoceo";
 const MIN_ORDER_SUM = 5000;
 
 const PROMO_CODES: { code: string; discountPercent: number; maxDiscount?: number }[] = [

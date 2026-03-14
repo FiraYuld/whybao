@@ -223,19 +223,11 @@ export default function ProductPage() {
             {displayProduct.price.toLocaleString("ru-RU")} ₽
           </p>
 
-          {displayProduct.sizes.some((s) =>
-            ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL"].includes(s.toUpperCase())
-          ) && (
+          {displayProduct.sizes.length > 0 && (
             <div className="mt-6">
               <h3 className="text-sm font-medium">Размер</h3>
               <div className="mt-2 flex flex-wrap gap-2">
-                {displayProduct.sizes
-                  .filter((s) =>
-                    ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL"].includes(
-                      s.toUpperCase()
-                    )
-                  )
-                  .map((s) => {
+                {displayProduct.sizes.map((s) => {
                     const outOfStock = unavailableSizes.includes(s);
                     return (
                       <button

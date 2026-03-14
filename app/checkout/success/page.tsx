@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { CheckCircle } from "lucide-react";
 
-const TELEGRAM_MANAGER_USERNAME = "whybao_s2m";
+const TELEGRAM_MANAGER_USERNAME = "whybaoceo";
 
 function telegramChatUrl(text: string) {
   return `https://t.me/${TELEGRAM_MANAGER_USERNAME}?text=${encodeURIComponent(text)}`;

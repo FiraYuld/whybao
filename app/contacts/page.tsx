@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 };
 
 const TELEGRAM_CHANNEL = "https://t.me/whybao";
-const TELEGRAM_MANAGER = "https://t.me/whybao_manager";
+const TELEGRAM_MANAGER = "https://t.me/whybaoceo";
 
 export default function ContactsPage() {
   return (
