@@ -80,7 +80,7 @@ export function Navbar() {
             onChange={(e) => setSearchQuery(e.target.value)}
             className="h-9"
           />
-          <Button type="submit" size="sm" variant="secondary">
+          <Button type="submit" size="sm" variant="secondary" aria-label="Найти">
             <Search className="size-4" />
           </Button>
         </form>

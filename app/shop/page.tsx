@@ -3,7 +3,7 @@ import { ShopContent } from "./shop-content";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "WhyBao — Каталог",
+  title: "WhyBao - Каталог",
   description:
     "Каталог WhyBao: streetwear и casual с китайским вайбом. Футболки, худи, брюки, обувь и аксессуары.",
 };

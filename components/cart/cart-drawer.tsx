@@ -44,9 +44,16 @@ export function CartDrawer() {
           </div>
           <div className="flex-1 overflow-y-auto p-4">
             {items.length === 0 ? (
-              <p className="py-8 text-center text-muted-foreground">
-                Корзина пуста
-              </p>
+              <div className="flex flex-col items-center gap-4 py-8">
+                <p className="text-center text-muted-foreground">Корзина пуста</p>
+                <Link
+                  href="/shop"
+                  onClick={() => setOpen(false)}
+                  className="inline-flex h-9 items-center justify-center bg-primary px-4 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+                >
+                  В каталог
+                </Link>
+              </div>
             ) : (
               <ul className="space-y-4">
                 {items.map((item) => (

@@ -15,11 +15,40 @@ const outfit = Outfit({
   display: "swap",
 });
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://whybao.ru";
+const siteName = "WhyBao";
+
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://whybao.ru"),
-  title: "WhyBao — Тренды из Китая для тебя",
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: "WhyBao - Тренды из Китая для тебя",
+    template: "%s | WhyBao",
+  },
   description:
-    "Нишевые трендовые вещи из Китая: streetwear, casual с китайским вайбом. Why not Bao?",
+    "WhyBao — байер-сервис: нишевые трендовые вещи из Китая, streetwear и casual. Бесплатная доставка в Россию. Why not Bao?",
+  keywords: ["WhyBao", "байер", "Китай", "одежда из Китая", "streetwear", "доставка из Китая"],
+  icons: {
+    icon: "/logo.webp",
+    shortcut: "/logo.webp",
+    apple: "/logo.webp",
+  },
+  openGraph: {
+    type: "website",
+    locale: "ru_RU",
+    url: siteUrl,
+    siteName,
+    title: "WhyBao - Тренды из Китая для тебя",
+    description: "Байер-сервис WhyBao: трендовая одежда из Китая с бесплатной доставкой в РФ.",
+    images: [{ url: "/logo.webp", width: 512, height: 512, alt: "WhyBao" }],
+  },
+  twitter: {
+    card: "summary",
+    title: "WhyBao - Тренды из Китая для тебя",
+    description: "Байер-сервис WhyBao: одежда из Китая, доставка в Россию.",
+  },
+  alternates: {
+    canonical: siteUrl,
+  },
 };
 
 export const viewport: Viewport = {
@@ -27,6 +56,15 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 5,
   viewportFit: "cover",
+};
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "WhyBao",
+  url: siteUrl,
+  logo: `${siteUrl}/logo.webp`,
+  description: "Байер-сервис WhyBao: трендовая одежда из Китая с бесплатной доставкой в Россию.",
 };
 
 export default function RootLayout({
@@ -39,6 +77,10 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${outfit.variable} min-h-screen w-full bg-background text-foreground antialiased`}
       >
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
         <div className="flex min-h-screen min-w-0 flex-col max-w-full">
           <Navbar />
           <main className="min-w-0 flex-1 max-w-full overflow-x-hidden">{children}</main>

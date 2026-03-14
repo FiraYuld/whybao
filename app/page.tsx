@@ -118,9 +118,36 @@ export default function HomePage() {
               Международная логистика уже оплачена
             </p>
             <p className="text-xs text-muted-foreground">
-              В цене учтена доставка из Китая в Россию — останется только отправка из Москвы.
+              В цене учтена доставка из Китая в Россию - останется только отправка из Москвы.
             </p>
           </div>
+        </div>
+      </section>
+
+      <section className="container mx-auto border-t px-4 py-8">
+        <div className="flex flex-wrap justify-center gap-3">
+          <Link
+            href="/contacts"
+            className="inline-flex h-11 min-w-[140px] items-center justify-center rounded-none border-2 border-primary px-4 text-sm font-semibold text-primary transition-colors hover:bg-primary/10"
+          >
+            Контакты
+          </Link>
+          <a
+            href="https://t.me/whybao"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex h-11 min-w-[140px] items-center justify-center rounded-none border-2 border-primary px-4 text-sm font-semibold text-primary transition-colors hover:bg-primary/10"
+          >
+            Telegram-канал
+          </a>
+          <a
+            href="https://t.me/whybaoceo"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex h-11 min-w-[140px] items-center justify-center rounded-none border-2 border-primary bg-primary px-4 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
+          >
+            Связь с менеджером
+          </a>
         </div>
       </section>
     </div>

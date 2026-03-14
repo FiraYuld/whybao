@@ -81,6 +81,17 @@ export default function CheckoutPage() {
   const [isSending, setIsSending] = useState(false);
   const [toast, setToast] = useState("");
   const [cacheLoaded, setCacheLoaded] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [confirmData, setConfirmData] = useState<{
+    orderId: string;
+    payload: {
+      orderId: string;
+      items: { name: string; size: string; color: string; price: number; quantity: number }[];
+      total: number;
+      customer: { name: string; phone: string; telegram: string; address: string; comment: string; promoDisplay?: string };
+    };
+    fullMessage: string;
+  } | null>(null);
 
   // Восстановление данных из localStorage при открытии страницы
   useEffect(() => {
@@ -139,7 +150,7 @@ export default function CheckoutPage() {
     setErrorField(null);
 
     if (finalTotal < MIN_ORDER_SUM) {
-      setError(`Минимальная сумма заказа — ${MIN_ORDER_SUM.toLocaleString("ru-RU")} ₽`);
+      setError(`Минимальная сумма заказа - ${MIN_ORDER_SUM.toLocaleString("ru-RU")} ₽`);
       setErrorField(null);
       return;
     }
@@ -161,7 +172,6 @@ export default function CheckoutPage() {
     }
 
     if (isSending) return;
-    setIsSending(true);
 
     const orderId = generateOrderId();
     const payload = {
@@ -189,32 +199,72 @@ export default function CheckoutPage() {
       payload.total,
       payload.customer
     );
+    setConfirmData({ orderId, payload, fullMessage });
+    setConfirmOpen(true);
+  };
+
+  const confirmAndSend = async () => {
+    if (!confirmData) return;
+    setIsSending(true);
+    setError("");
+    const { orderId, payload, fullMessage } = confirmData;
+
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 20000);
 
     try {
       const res = await fetch("/api/orders", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
+        signal: controller.signal,
       });
+      clearTimeout(timeoutId);
 
       if (res.ok) {
         clearCart();
-        const shortMessage = `Здравствуйте! Хочу подтвердить заказ и уточнить детали.\n\nНомер заказа: ${orderId}`;
+        try {
+          window.localStorage.removeItem(CHECKOUT_STORAGE_KEY);
+        } catch {
+          /* ignore */
+        }
+        setConfirmOpen(false);
+        setConfirmData(null);
+        const shortMessage = `Тук-тук~
+Хочу подтвердить заказик ${orderId} и уточнить детали.`;
         window.open(telegramChatUrl(shortMessage), "_blank");
         router.push(`/checkout/success?order=${encodeURIComponent(orderId)}`);
         return;
       }
-    } catch {
-      // network or other error
+
+      let errMsg = "Не удалось отправить заказ. Попробуйте позже.";
+      try {
+        const data = await res.json();
+        if (typeof data?.error === "string") errMsg = data.error;
+      } catch {
+        /* ignore */
+      }
+      setError(errMsg);
+    } catch (e) {
+      clearTimeout(timeoutId);
+      const isAbort = e instanceof Error && e.name === "AbortError";
+      setError(
+        isAbort
+          ? "Превышено время ожидания. Проверьте интернет и попробуйте снова."
+          : "Ошибка сети. Проверьте подключение и попробуйте снова."
+      );
     }
 
-    // Fallback: open full order in Telegram so user can send manually
-    window.open(telegramChatUrl(fullMessage), "_blank");
-    setToast(
-      "Не удалось отправить автоматически. Открыт чат — отправьте сообщение вручную."
-    );
-    setTimeout(() => setToast(""), 5000);
     setIsSending(false);
+    setConfirmOpen(false);
+    setConfirmData(null);
+    const maxTextLen = 500;
+    const textForUrl = fullMessage.length > maxTextLen
+      ? fullMessage.slice(0, maxTextLen) + "\n\n... (полный текст заказа отправьте менеджеру вручную)"
+      : fullMessage;
+    window.open(telegramChatUrl(textForUrl), "_blank");
+    setToast("Открыт чат - при необходимости отправьте сообщение вручную.");
+    setTimeout(() => setToast(""), 5000);
   };
 
   return (
@@ -232,6 +282,7 @@ export default function CheckoutPage() {
             onChange={(e) => setName(e.target.value)}
             placeholder="Фамилия Имя Отчество"
             className={`mt-1 ${errorField === "name" ? "border-destructive" : ""}`}
+            maxLength={200}
             required
           />
         </div>
@@ -280,6 +331,7 @@ export default function CheckoutPage() {
             onChange={(e) => setTelegram(e.target.value.replace(/\s/g, ""))}
             placeholder="@username"
             className={`mt-1 ${errorField === "telegram" ? "border-destructive" : ""}`}
+            maxLength={100}
             required
           />
         </div>
@@ -293,6 +345,7 @@ export default function CheckoutPage() {
             onChange={(e) => setAddress(e.target.value)}
             placeholder="Город доставки"
             className="mt-1"
+            maxLength={300}
           />
           <p className="mt-1 text-xs text-muted-foreground">
             Подробный адрес обсудим в чате с менеджером
@@ -309,6 +362,7 @@ export default function CheckoutPage() {
             placeholder="Пожелания к заказу"
             className="mt-1 flex min-h-[80px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm"
             rows={3}
+            maxLength={500}
           />
         </div>
 
@@ -384,6 +438,85 @@ export default function CheckoutPage() {
         <div className="fixed inset-x-0 bottom-4 z-40 flex justify-center px-4">
           <div className="max-w-md rounded-md bg-card px-4 py-3 text-sm text-muted-foreground shadow-lg">
             {toast}
+          </div>
+        </div>
+      )}
+
+      {confirmOpen && confirmData && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="confirm-order-title"
+        >
+          <div
+            className="absolute inset-0 bg-black/50"
+            onClick={() => { setConfirmOpen(false); setConfirmData(null); }}
+            aria-hidden
+          />
+          <div className="relative max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-lg border bg-background p-6 shadow-xl">
+            <h2 id="confirm-order-title" className="font-accent text-xl font-bold">
+              Проверьте данные заказа
+            </h2>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Убедитесь, что всё верно, и нажмите «Подтвердить и отправить».
+            </p>
+            <dl className="mt-6 space-y-2 text-sm">
+              <div>
+                <dt className="font-medium text-muted-foreground">ФИО</dt>
+                <dd>{confirmData.payload.customer.name}</dd>
+              </div>
+              <div>
+                <dt className="font-medium text-muted-foreground">Телефон</dt>
+                <dd>{confirmData.payload.customer.phone}</dd>
+              </div>
+              <div>
+                <dt className="font-medium text-muted-foreground">Telegram</dt>
+                <dd>@{confirmData.payload.customer.telegram}</dd>
+              </div>
+              {confirmData.payload.customer.address && (
+                <div>
+                  <dt className="font-medium text-muted-foreground">Город</dt>
+                  <dd>{confirmData.payload.customer.address}</dd>
+                </div>
+              )}
+              {confirmData.payload.customer.comment && (
+                <div>
+                  <dt className="font-medium text-muted-foreground">Комментарий</dt>
+                  <dd className="whitespace-pre-wrap">{confirmData.payload.customer.comment}</dd>
+                </div>
+              )}
+            </dl>
+            <div className="mt-4 border-t pt-4">
+              <dt className="font-medium text-muted-foreground">Товары</dt>
+              <ul className="mt-1 space-y-1 text-sm">
+                {confirmData.payload.items.map((i, idx) => (
+                  <li key={idx}>
+                    {i.name} ({i.size}, {i.color}) - {i.price.toLocaleString("ru-RU")} ₽ × {i.quantity}
+                  </li>
+                ))}
+              </ul>
+              <p className="mt-2 font-semibold">
+                Итого: {confirmData.payload.total.toLocaleString("ru-RU")} ₽
+              </p>
+            </div>
+            <div className="mt-6 flex flex-col gap-2 sm:flex-row sm:justify-end">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => { setConfirmOpen(false); setConfirmData(null); }}
+                disabled={isSending}
+              >
+                Вернуться к правкам
+              </Button>
+              <Button
+                type="button"
+                onClick={confirmAndSend}
+                disabled={isSending}
+              >
+                {isSending ? "Отправляем..." : "Подтвердить и отправить"}
+              </Button>
+            </div>
           </div>
         </div>
       )}

@@ -30,11 +30,14 @@ function validatePayload(body: unknown): body is OrderPayload {
   if (typeof b.total !== "number") return false;
   if (!b.customer || typeof b.customer !== "object") return false;
   const c = b.customer as Record<string, unknown>;
-  if (typeof c.name !== "string" || !(c.name as string).trim()) return false;
-  if (typeof c.phone !== "string" || !(c.phone as string).trim()) return false;
-  if (typeof c.telegram !== "string" || !(c.telegram as string).trim()) return false;
-  if (typeof c.address !== "string") return false;
-  if (typeof c.comment !== "string") return false;
+  const nameStr = (c.name as string).trim();
+  if (typeof c.name !== "string" || !nameStr || nameStr.length > 200) return false;
+  const phoneStr = (c.phone as string).replace(/\D/g, "");
+  if (typeof c.phone !== "string" || !(c.phone as string).trim() || phoneStr.length < 10 || phoneStr.length > 11) return false;
+  const telegramStr = (c.telegram as string).trim();
+  if (typeof c.telegram !== "string" || !telegramStr || telegramStr.length > 100) return false;
+  if (typeof c.address !== "string" || (c.address as string).length > 300) return false;
+  if (typeof c.comment !== "string" || (c.comment as string).length > 500) return false;
   if (c.promoDisplay !== undefined && typeof c.promoDisplay !== "string") return false;
   return true;
 }
@@ -62,14 +65,14 @@ export async function POST(request: Request) {
 
   if (!validatePayload(body)) {
     return NextResponse.json(
-      { error: "Не указаны имя, телефон, Telegram или товары" },
+      { error: "Неверные данные: проверьте формат телефона и длину полей" },
       { status: 400 }
     );
   }
 
   if (body.total < 5000) {
     return NextResponse.json(
-      { error: "Минимальная сумма заказа — 5 000 ₽" },
+      { error: "Минимальная сумма заказа - 5 000 ₽" },
       { status: 400 }
     );
   }
@@ -82,19 +85,31 @@ export async function POST(request: Request) {
   );
 
   const url = `${TELEGRAM_API}/bot${token}/sendMessage`;
-  const res = await fetch(url, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      chat_id: chatId,
-      text,
-      parse_mode: undefined,
-    }),
-  });
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 15000);
+  let res: Response;
+  try {
+    res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        chat_id: chatId,
+        text,
+        parse_mode: undefined,
+      }),
+      signal: controller.signal,
+    });
+  } catch {
+    clearTimeout(timeoutId);
+    return NextResponse.json(
+      { error: "Не удалось отправить заказ в Telegram" },
+      { status: 500 }
+    );
+  }
+  clearTimeout(timeoutId);
 
   if (!res.ok) {
-    const err = await res.text();
-    console.error("Telegram API error:", res.status, err);
+    console.error("Telegram API error:", res.status);
     return NextResponse.json(
       { error: "Не удалось отправить заказ в Telegram" },
       { status: 500 }

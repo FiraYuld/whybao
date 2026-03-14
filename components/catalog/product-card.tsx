@@ -33,6 +33,7 @@ export function ProductCard({ product, onQuickAdd, index = 0 }: ProductCardProps
 
   const [imageIndex, setImageIndex] = useState(0);
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageError, setImageError] = useState(false);
   const [justAdded, setJustAdded] = useState(false);
 
   useEffect(() => {
@@ -45,6 +46,7 @@ export function ProductCard({ product, onQuickAdd, index = 0 }: ProductCardProps
 
   useEffect(() => {
     setImageLoaded(false);
+    setImageError(false);
   }, [imageIndex]);
 
   // Предзагрузка следующего и предыдущего фото
@@ -109,15 +111,22 @@ export function ProductCard({ product, onQuickAdd, index = 0 }: ProductCardProps
               transition={{ duration: 0.25 }}
               className="absolute inset-0"
             >
-              <Image
-                src={product.images[imageIndex]}
-                alt={product.name}
-                fill
-                unoptimized
-                className="object-contain transition-transform duration-300 group-hover:scale-105"
-                sizes="(max-width: 640px) 50vw, 25vw"
-                onLoad={() => setImageLoaded(true)}
-              />
+              {imageError ? (
+                <div className="absolute inset-0 flex flex-col items-center justify-center gap-1 bg-muted p-4 text-center text-sm text-muted-foreground">
+                  Фото недоступно
+                </div>
+              ) : (
+                <Image
+                  src={product.images[imageIndex]}
+                  alt={product.name}
+                  fill
+                  unoptimized
+                  className="object-contain transition-transform duration-300 group-hover:scale-105"
+                  sizes="(max-width: 640px) 50vw, 25vw"
+                  onLoad={() => setImageLoaded(true)}
+                  onError={() => setImageError(true)}
+                />
+              )}
             </motion.div>
           </AnimatePresence>
           <button

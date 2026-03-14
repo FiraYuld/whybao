@@ -7,7 +7,8 @@ import { FilterSidebar } from "@/components/catalog/filter-sidebar";
 import { useShallow } from "zustand/react/shallow";
 import { useFilterStore } from "@/lib/store/filter-store";
 import { getFilteredProducts } from "@/lib/product-utils";
-import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Filter } from "lucide-react";
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 
@@ -109,9 +110,23 @@ export function ShopContent() {
         </div>
 
         {filteredProducts.length === 0 && (
-          <p className="py-12 text-center text-muted-foreground">
-            Товары не найдены. Попробуйте изменить фильтры.
-          </p>
+          <div className="flex flex-col items-center gap-4 py-12">
+            <p className="text-center text-muted-foreground">
+              Товары не найдены. Попробуйте изменить фильтры.
+            </p>
+            <div className="flex flex-wrap justify-center gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => useFilterStore.getState().resetFilters()}
+              >
+                Сбросить фильтры
+              </Button>
+              <Link href="/shop" className={buttonVariants()}>
+                В каталог
+              </Link>
+            </div>
+          </div>
         )}
 
         {hasMore && <div ref={sentinelRef} className="h-4 w-full" aria-hidden />}

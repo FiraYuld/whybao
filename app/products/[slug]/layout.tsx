@@ -15,10 +15,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const product = getProductBySlug(slug);
   if (!product) {
-    return { title: "Товар не найден — WhyBao" };
+    return { title: "Товар не найден - WhyBao" };
   }
   const brandName = brands.find((b) => b.slug === product.brand)?.name ?? product.brand;
-  const title = `${product.name} — ${brandName} | WhyBao`;
+  const title = `${product.name} - ${brandName} | WhyBao`;
   const description =
     product.description.slice(0, 155).replace(/\n/g, " ").trim() + (product.description.length > 155 ? "…" : "");
   const ogImage = product.images[0]
