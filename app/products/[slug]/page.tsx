@@ -109,7 +109,7 @@ export default function ProductPage() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  if (!product) {
+  if (!product || !displayProduct) {
     return (
       <div className="container mx-auto px-4 py-16 text-center">
         <h1 className="text-2xl font-bold">Товар не найден</h1>
