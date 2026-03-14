@@ -81,6 +81,20 @@ export function getProductBySlug(slug: string): Product | undefined {
   return VISIBLE_PRODUCTS.find((p) => p.slug === slug);
 }
 
+/**
+ * Если товар входит в комплект (пара верх/низ), возвращает [верх, низ] в этом порядке.
+ * Иначе null.
+ */
+export function getSetProducts(slug: string): Product[] | null {
+  const product = getProductBySlug(slug);
+  if (!product?.setPart || !product.relatedSlugs?.length) return null;
+  const related = getProductBySlug(product.relatedSlugs[0]);
+  if (!related?.setPart || related.setPart === product.setPart) return null;
+  const top = product.setPart === "top" ? product : related;
+  const bottom = product.setPart === "bottom" ? product : related;
+  return [top, bottom];
+}
+
 export function getAllProductSlugs(): string[] {
   return VISIBLE_PRODUCTS.map((p) => p.slug);
 }

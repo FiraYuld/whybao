@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -17,6 +17,25 @@ export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [categoriesOpen, setCategoriesOpen] = useState(false);
+  const [brandsOpen, setBrandsOpen] = useState(false);
+  const navRef = useRef<HTMLElement>(null);
+
+  // Закрыть выпадающие меню при клике вне навбара (важно для iPad/тач)
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent | TouchEvent) => {
+      if (navRef.current && !navRef.current.contains(e.target as Node)) {
+        setCategoriesOpen(false);
+        setBrandsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("touchstart", handleClickOutside, { passive: true });
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+    };
+  }, []);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -67,21 +86,33 @@ export function Navbar() {
         </form>
 
         {/* Desktop: Nav links */}
-        <nav className="hidden items-center gap-1 lg:flex">
+        <nav ref={navRef} className="hidden items-center gap-1 lg:flex">
           <div className="relative group">
             <button
               type="button"
+              onClick={() => {
+                setCategoriesOpen((v) => !v);
+                setBrandsOpen(false);
+              }}
+              aria-expanded={categoriesOpen}
+              aria-haspopup="true"
               className="flex items-center gap-1 rounded-md px-3 py-2 text-sm font-medium hover:bg-muted"
             >
               Категории
               <span className="text-xs">▼</span>
             </button>
-            <div className="absolute left-0 top-full hidden min-w-[200px] rounded-md border bg-popover p-2 shadow-lg group-hover:block">
+            <div
+              className={cn(
+                "absolute left-0 top-full min-w-[200px] rounded-md border bg-popover p-2 shadow-lg",
+                categoriesOpen ? "block" : "hidden group-hover:block"
+              )}
+            >
               {categories.map((c) => (
                 <Link
                   key={c.id}
                   href={`/shop?category=${c.slug}`}
                   className="block rounded px-2 py-1.5 text-sm hover:bg-muted"
+                  onClick={() => setCategoriesOpen(false)}
                 >
                   {c.name}
                 </Link>
@@ -91,17 +122,29 @@ export function Navbar() {
           <div className="relative group">
             <button
               type="button"
+              onClick={() => {
+                setBrandsOpen((v) => !v);
+                setCategoriesOpen(false);
+              }}
+              aria-expanded={brandsOpen}
+              aria-haspopup="true"
               className="flex items-center gap-1 rounded-md px-3 py-2 text-sm font-medium hover:bg-muted"
             >
               Бренды
               <span className="text-xs">▼</span>
             </button>
-            <div className="absolute left-0 top-full hidden min-w-[200px] rounded-md border bg-popover p-2 shadow-lg group-hover:block">
+            <div
+              className={cn(
+                "absolute left-0 top-full min-w-[200px] rounded-md border bg-popover p-2 shadow-lg",
+                brandsOpen ? "block" : "hidden group-hover:block"
+              )}
+            >
               {brands.map((b) => (
                 <Link
                   key={b.id}
                   href={`/brands/${b.slug}`}
                   className="block rounded px-2 py-1.5 text-sm hover:bg-muted"
+                  onClick={() => setBrandsOpen(false)}
                 >
                   {b.name}
                 </Link>

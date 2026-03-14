@@ -3,10 +3,10 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { Heart, ShoppingCart, ArrowUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { getProductBySlug } from "@/lib/product-utils";
+import { getProductBySlug, getSetProducts } from "@/lib/product-utils";
 import { brands } from "@/data/brands";
 import { useCartStore } from "@/lib/store/cart-store";
 import { useWishlistStore } from "@/lib/store/wishlist-store";
@@ -16,42 +16,56 @@ import { AnimatePresence, motion } from "framer-motion";
 
 export default function ProductPage() {
   const params = useParams();
+  const router = useRouter();
   const slug = params.slug as string;
   const product = getProductBySlug(slug);
+  const setProducts = getSetProducts(slug);
+  /** В режиме комплекта показываем контент текущего товара (по slug); переключение вкладки = переход по slug другого */
+  const displayProduct = product ?? null;
 
-  const [selectedSize, setSelectedSize] = useState(product?.sizes[0] ?? "");
+  const [selectedSize, setSelectedSize] = useState(displayProduct?.sizes[0] ?? "");
   const [selectedColor, setSelectedColor] = useState(
-    product?.colors[0]?.name ?? ""
+    displayProduct?.colors[0]?.name ?? ""
   );
   const [imageIndex, setImageIndex] = useState(0);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [loadedLongIndexes, setLoadedLongIndexes] = useState<Set<number>>(new Set());
   const [showScrollTop, setShowScrollTop] = useState(false);
 
+  // При смене товара (slug) сбрасываем карусель и выбор
+  useEffect(() => {
+    if (!displayProduct) return;
+    setSelectedSize(displayProduct.sizes[0] ?? "");
+    setSelectedColor(displayProduct.colors[0]?.name ?? "");
+    setImageIndex(0);
+    setLoadedLongIndexes(new Set());
+    setImageLoaded(false);
+  }, [displayProduct?.slug]);
+
   const addItem = useCartStore((s) => s.addItem);
   const toggleWishlist = useWishlistStore((s) => s.toggle);
   const inWishlist = useWishlistStore((s) => s.has(slug));
 
   const unavailableSizes =
-    product?.outOfStock?.find((o) => o.color === selectedColor)?.sizes ?? [];
+    displayProduct?.outOfStock?.find((o) => o.color === selectedColor)?.sizes ?? [];
 
   useEffect(() => {
-    if (!product) return;
+    if (!displayProduct) return;
     const unavailable =
-      product.outOfStock?.find((o) => o.color === selectedColor)?.sizes ?? [];
+      displayProduct.outOfStock?.find((o) => o.color === selectedColor)?.sizes ?? [];
     if (unavailable.includes(selectedSize)) {
-      const firstAvailable = product.sizes.find((s) => !unavailable.includes(s));
-      setSelectedSize(firstAvailable ?? product.sizes[0] ?? "");
+      const firstAvailable = displayProduct.sizes.find((s) => !unavailable.includes(s));
+      setSelectedSize(firstAvailable ?? displayProduct.sizes[0] ?? "");
     }
-  }, [product, selectedColor]);
+  }, [displayProduct, selectedColor]);
 
   useEffect(() => {
-    if (!product || product.images.length <= 1) return;
+    if (!displayProduct || displayProduct.images.length <= 1) return;
     const interval = setInterval(() => {
-      setImageIndex((prev) => (prev + 1) % product.images.length);
+      setImageIndex((prev) => (prev + 1) % displayProduct.images.length);
     }, 6000);
     return () => clearInterval(interval);
-  }, [product]);
+  }, [displayProduct]);
 
   // Сбрасываем «загружено» при смене слайда, чтобы показать скелетон
   useEffect(() => {
@@ -60,10 +74,10 @@ export default function ProductPage() {
 
   // Предзагрузка следующего и предыдущего фото для плавного автоскролла
   useEffect(() => {
-    if (!product?.images?.length) return;
-    const n = product.images.length;
-    const nextSrc = product.images[(imageIndex + 1) % n];
-    const prevSrc = product.images[(imageIndex - 1 + n) % n];
+    if (!displayProduct?.images?.length) return;
+    const n = displayProduct.images.length;
+    const nextSrc = displayProduct.images[(imageIndex + 1) % n];
+    const prevSrc = displayProduct.images[(imageIndex - 1 + n) % n];
     const preload = (src: string) => {
       if (typeof window === "undefined") return;
       const img = new window.Image();
@@ -71,16 +85,16 @@ export default function ProductPage() {
     };
     preload(nextSrc);
     if (n > 1) preload(prevSrc);
-  }, [product, imageIndex]);
+  }, [displayProduct, imageIndex]);
 
   // Предзагрузка первых longImages при открытии страницы
   useEffect(() => {
-    if (!product?.longImages?.length || typeof window === "undefined") return;
-    product.longImages.slice(0, 4).forEach((src) => {
+    if (!displayProduct?.longImages?.length || typeof window === "undefined") return;
+    displayProduct.longImages.slice(0, 4).forEach((src) => {
       const img = new window.Image();
       img.src = src;
     });
-  }, [product?.longImages]);
+  }, [displayProduct?.longImages]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -106,21 +120,26 @@ export default function ProductPage() {
     );
   }
 
-  const brandName = brands.find((b) => b.slug === product.brand)?.name ?? product.brand;
+  const brandName = brands.find((b) => b.slug === displayProduct.brand)?.name ?? displayProduct.brand;
 
   const canAddToCart = !unavailableSizes.includes(selectedSize);
 
   const handleAddToCart = () => {
     if (!canAddToCart) return;
     addItem({
-      productId: product.id,
-      slug: product.slug,
-      name: product.name,
-      price: product.price,
-      image: product.images[0],
+      productId: displayProduct.id,
+      slug: displayProduct.slug,
+      name: displayProduct.name,
+      price: displayProduct.price,
+      image: displayProduct.images[0],
       size: selectedSize,
       color: selectedColor,
     });
+  };
+
+  const handleSetPartClick = (targetSlug: string) => {
+    if (targetSlug === slug) return;
+    router.push(`/products/${targetSlug}`);
   };
 
   return (
@@ -130,8 +149,8 @@ export default function ProductPage() {
         items={[
           { href: "/", label: "Главная" },
           { href: "/shop", label: "Каталог" },
-          { href: `/brands/${product.brand}`, label: brandName },
-          { label: product.name },
+          { href: `/brands/${displayProduct.brand}`, label: brandName },
+          { label: displayProduct.name },
         ]}
       />
 
@@ -146,7 +165,7 @@ export default function ProductPage() {
             )}
             <AnimatePresence mode="wait">
               <motion.div
-                key={imageIndex}
+                key={`${displayProduct.slug}-${imageIndex}`}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: imageLoaded ? 1 : 0 }}
                 exit={{ opacity: 0 }}
@@ -154,8 +173,8 @@ export default function ProductPage() {
                 className="absolute inset-0"
               >
                 <Image
-                  src={product.images[imageIndex]}
-                  alt={product.name}
+                  src={displayProduct.images[imageIndex]}
+                  alt={displayProduct.name}
                   fill
                   unoptimized
                   className="object-cover"
@@ -167,7 +186,7 @@ export default function ProductPage() {
             </AnimatePresence>
           </div>
           <div className="flex gap-2 overflow-x-auto">
-            {product.images.map((img, i) => (
+            {displayProduct.images.map((img, i) => (
               <button
                 key={i}
                 type="button"
@@ -191,26 +210,26 @@ export default function ProductPage() {
 
         <div className="min-w-0 md:max-w-xl md:mx-auto">
           <Link
-            href={`/brands/${product.brand}`}
+            href={`/brands/${displayProduct.brand}`}
             className="inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground hover:text-foreground"
           >
             <span>{brandName}</span>
             <span className="text-[10px]">&gt;</span>
           </Link>
           <h1 className="mt-1 font-accent text-2xl font-bold md:text-3xl">
-            {product.name}
+            {displayProduct.name}
           </h1>
           <p className="mt-4 text-2xl font-bold text-primary">
-            {product.price.toLocaleString("ru-RU")} ₽
+            {displayProduct.price.toLocaleString("ru-RU")} ₽
           </p>
 
-          {product.sizes.some((s) =>
+          {displayProduct.sizes.some((s) =>
             ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL"].includes(s.toUpperCase())
           ) && (
             <div className="mt-6">
               <h3 className="text-sm font-medium">Размер</h3>
               <div className="mt-2 flex flex-wrap gap-2">
-                {product.sizes
+                {displayProduct.sizes
                   .filter((s) =>
                     ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL"].includes(
                       s.toUpperCase()
@@ -244,11 +263,11 @@ export default function ProductPage() {
             </div>
           )}
 
-          {product.colors.length > 0 && (
+          {displayProduct.colors.length > 0 && (
             <div className="mt-6">
               <h3 className="text-sm font-medium">Цвет</h3>
               <div className="mt-2 flex flex-wrap gap-2">
-                {product.colors.map((c) => (
+                {displayProduct.colors.map((c) => (
                   <button
                     key={c.name}
                     type="button"
@@ -264,6 +283,28 @@ export default function ProductPage() {
                       style={{ backgroundColor: c.hex }}
                     />
                     {c.name}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {setProducts && setProducts.length === 2 && (
+            <div className="mt-6">
+              <h3 className="text-sm font-medium">Часть комплекта</h3>
+              <div className="mt-2 flex flex-wrap gap-2">
+                {setProducts.map((p) => (
+                  <button
+                    key={p.slug}
+                    type="button"
+                    onClick={() => handleSetPartClick(p.slug)}
+                    className={`rounded-md border px-4 py-2 text-sm font-medium transition-colors ${
+                      p.slug === slug
+                        ? "border-primary bg-primary text-primary-foreground"
+                        : "border-input hover:bg-muted"
+                    }`}
+                  >
+                    {p.setLabel ?? p.name}
                   </button>
                 ))}
               </div>
@@ -292,11 +333,11 @@ export default function ProductPage() {
             </Button>
           </div>
 
-          {product.relatedSlugs && product.relatedSlugs.length > 0 && (
+          {!setProducts && displayProduct.relatedSlugs && displayProduct.relatedSlugs.length > 0 && (
             <section className="mt-8 border-t pt-8">
               <h3 className="font-medium text-lg">С этим товаром покупают</h3>
               <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
-                {product.relatedSlugs
+                {displayProduct.relatedSlugs
                   .map((relatedSlug) => getProductBySlug(relatedSlug))
                   .filter(Boolean)
                   .map((related) => (
@@ -313,13 +354,13 @@ export default function ProductPage() {
           <div className="mt-8 border-t pt-8">
             <h3 className="font-medium">Описание</h3>
             <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-foreground md:text-base md:leading-relaxed">
-              {product.description}
+              {displayProduct.description}
             </p>
           </div>
 
-          {product.longImages && product.longImages.length > 0 && (
+          {displayProduct.longImages && displayProduct.longImages.length > 0 && (
             <div className="mt-8 w-full max-w-full space-y-0 md:max-w-2xl md:mx-auto">
-              {product.longImages.map((src, i) => (
+              {displayProduct.longImages.map((src, i) => (
                 <div key={i} className="relative w-full max-w-full overflow-hidden min-h-[200px]">
                   {!loadedLongIndexes.has(i) && (
                     <div
@@ -329,7 +370,7 @@ export default function ProductPage() {
                   )}
                   <Image
                     src={src}
-                    alt={`${product.name} детальное фото ${i + 1}`}
+                    alt={`${displayProduct.name} детальное фото ${i + 1}`}
                     width={800}
                     height={1200}
                     unoptimized

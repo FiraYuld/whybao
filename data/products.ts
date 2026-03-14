@@ -16,6 +16,10 @@ export interface Product {
   outOfStock?: { color: string; sizes: string[] }[];
   /** Слаги товаров из одного комплекта / «с этим товаром покупают» */
   relatedSlugs?: string[];
+  /** Часть комплекта: верх или низ. При наличии + relatedSlugs из одной пары показывается переключатель на странице товара */
+  setPart?: "top" | "bottom";
+  /** Короткое название для вкладки переключателя (например «Худи», «Брюки») */
+  setLabel?: string;
 }
 
 export const products: Product[] = [
@@ -800,6 +804,8 @@ export const products: Product[] = [
     ],
     isNew: true,
     relatedSlugs: ["weekendhub2"],
+    setPart: "top",
+    setLabel: "Худи",
   },
   {
     id: "60",
@@ -835,6 +841,8 @@ export const products: Product[] = [
     ],
     isNew: true,
     relatedSlugs: ["weekendhub1"],
+    setPart: "bottom",
+    setLabel: "Брюки",
   },
   // --- OLDORDER (обувь) ---
   {
@@ -969,9 +977,9 @@ export const products: Product[] = [
     isNew: true,
   },
   {
-    id: "67",
-    slug: "echosta2",
-    name: "Комплект «Черно-белая клетка» с воротничком и завязками",
+    id: "67a",
+    slug: "echosta2-top",
+    name: "Комплект «Черно-белая клетка» с воротничком и завязками — топ",
     brand: "echosta",
     category: "skirts",
     price: 3850,
@@ -982,14 +990,37 @@ export const products: Product[] = [
       "/products/echosta2/4.webp",
     ],
     sizes: ["S", "M", "L"],
-    colors: [
-      { name: "Топ", hex: "#fafafa" },
-      { name: "Юбка", hex: "#1a1a1a" },
-    ],
+    colors: [{ name: "Черно-белая клетка", hex: "#1a1a1a" }],
     description:
-      "Комплект ECHOSTA «Черно-белая клетка»: топ и юбка с воротничком и завязками. В комплекте две отдельные позиции — топ и юбка; каждая продаётся по 3850 ₽. Выберите нужную часть (Топ или Юбка).\n\nПараметры модели:\n· Рост: 168 см, объемы 80/62/88 см, размер на модели: топ S, юбка S\n\nСостав:\n· 50% полиэстер, 50% хлопок",
+      "Комплект ECHOSTA «Черно-белая клетка» — топ с воротничком и завязками. Юбка продаётся отдельно.\n\nПараметры модели:\n· Рост: 168 см, объемы 80/62/88 см, размер на модели: топ S, юбка S\n\nСостав:\n· 50% полиэстер, 50% хлопок",
     longImages: Array.from({ length: 17 }, (_, i) => `/products/echosta2/desc_${i + 1}.webp`),
     isNew: true,
+    relatedSlugs: ["echosta2-skirt"],
+    setPart: "top",
+    setLabel: "Топ",
+  },
+  {
+    id: "67b",
+    slug: "echosta2-skirt",
+    name: "Комплект «Черно-белая клетка» с воротничком и завязками — юбка",
+    brand: "echosta",
+    category: "skirts",
+    price: 3850,
+    images: [
+      "/products/echosta2/1.webp",
+      "/products/echosta2/2.webp",
+      "/products/echosta2/3.webp",
+      "/products/echosta2/4.webp",
+    ],
+    sizes: ["S", "M", "L"],
+    colors: [{ name: "Черно-белая клетка", hex: "#1a1a1a" }],
+    description:
+      "Комплект ECHOSTA «Черно-белая клетка» — юбка с воротничком и завязками. Топ продаётся отдельно.\n\nПараметры модели:\n· Рост: 168 см, объемы 80/62/88 см, размер на модели: топ S, юбка S\n\nСостав:\n· 50% полиэстер, 50% хлопок",
+    longImages: Array.from({ length: 17 }, (_, i) => `/products/echosta2/desc_${i + 1}.webp`),
+    isNew: true,
+    relatedSlugs: ["echosta2-top"],
+    setPart: "bottom",
+    setLabel: "Юбка",
   },
   // --- Ariseism ---
   {
@@ -1013,6 +1044,8 @@ export const products: Product[] = [
     longImages: Array.from({ length: 10 }, (_, i) => `/products/ariseism1/desc_${i + 1}.webp`),
     isNew: true,
     relatedSlugs: ["ariseism1-pants"],
+    setPart: "top",
+    setLabel: "Топ",
   },
   {
     id: "69",
@@ -1035,11 +1068,37 @@ export const products: Product[] = [
     longImages: Array.from({ length: 10 }, (_, i) => `/products/ariseism1/desc_${i + 1}.webp`),
     isNew: true,
     relatedSlugs: ["ariseism1-top"],
+    setPart: "bottom",
+    setLabel: "Брюки",
   },
   {
-    id: "70",
-    slug: "ariseism2",
-    name: "Темно-синий костюм с открытыми плечами",
+    id: "70a",
+    slug: "ariseism2-top",
+    name: "Темно-синий костюм с открытыми плечами — топ",
+    brand: "ariseism",
+    category: "shirts-blouses",
+    price: 4100,
+    images: [
+      "/products/ariseism2/1.webp",
+      "/products/ariseism2/2.webp",
+      "/products/ariseism2/3.webp",
+      "/products/ariseism2/4.webp",
+      "/products/ariseism2/5.webp",
+    ],
+    sizes: ["XS", "S", "M", "L"],
+    colors: [{ name: "Темно-синий", hex: "#1e3a5f" }],
+    description:
+      "Костюм Ariseism темно-синий с открытыми плечами — топ. Брюки продаются отдельно.\n\nПараметры модели:\n· Рост: 171 см, вес 50 кг, размер на модели M\n\nСостав (рубашка/топ):\n· Ткань A: 100% хлопок\n· Ткань B: 97.8% хлопок, 2.2% эластан\n· Подкладка: 90% полиэстер, 10% хлопок",
+    longImages: Array.from({ length: 15 }, (_, i) => `/products/ariseism2/desc_${i + 1}.webp`),
+    isNew: true,
+    relatedSlugs: ["ariseism2-pants"],
+    setPart: "top",
+    setLabel: "Топ",
+  },
+  {
+    id: "70b",
+    slug: "ariseism2-pants",
+    name: "Темно-синий костюм с открытыми плечами — брюки",
     brand: "ariseism",
     category: "pants",
     price: 4100,
@@ -1051,14 +1110,14 @@ export const products: Product[] = [
       "/products/ariseism2/5.webp",
     ],
     sizes: ["XS", "S", "M", "L"],
-    colors: [
-      { name: "Топ", hex: "#1e3a5f" },
-      { name: "Брюки", hex: "#1e3a5f" },
-    ],
+    colors: [{ name: "Темно-синий", hex: "#1e3a5f" }],
     description:
-      "Костюм Ariseism (топ + брюки) темно-синий с открытыми плечами. Цена 4100 ₽ за каждую единицу — выберите Топ или Брюки.\n\nПараметры модели:\n· Рост: 171 см, вес 50 кг, размер на модели M\n\nСостав (рубашка/топ):\n· Ткань A: 100% хлопок\n· Ткань B: 97.8% хлопок, 2.2% эластан\n· Подкладка: 90% полиэстер, 10% хлопок\n\nСостав (брюки):\n· Ткань A: 81.1% полиэстер, 18.9% вискоза\n· Ткань B: 100% хлопок\n· Подкладка: 100% полиэстер",
+      "Костюм Ariseism темно-синий с открытыми плечами — брюки. Топ продаётся отдельно.\n\nПараметры модели:\n· Рост: 171 см, вес 50 кг, размер на модели M\n\nСостав (брюки):\n· Ткань A: 81.1% полиэстер, 18.9% вискоза\n· Ткань B: 100% хлопок\n· Подкладка: 100% полиэстер",
     longImages: Array.from({ length: 15 }, (_, i) => `/products/ariseism2/desc_${i + 1}.webp`),
     isNew: true,
+    relatedSlugs: ["ariseism2-top"],
+    setPart: "bottom",
+    setLabel: "Брюки",
   },
   {
     id: "71",
