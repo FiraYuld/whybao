@@ -2,7 +2,9 @@ import type { Metadata, Viewport } from "next";
 import { Inter, Outfit } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/layout/navbar";
+import { Footer } from "@/components/layout/footer";
 import { YandexMetrika } from "@/components/analytics/yandex-metrika";
+import { CookieConsent } from "@/components/cookie-consent";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -31,7 +33,7 @@ export const metadata: Metadata = {
   icons: {
     icon: "/logo.webp",
     shortcut: "/logo.webp",
-    apple: "/logo.webp",
+    apple: "/apple-touch-icon.png",
   },
   openGraph: {
     type: "website",
@@ -83,9 +85,11 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
         <YandexMetrika />
+        <CookieConsent />
         <div className="flex min-h-screen min-w-0 flex-col max-w-full">
           <Navbar />
           <main className="min-w-0 flex-1 max-w-full overflow-x-hidden">{children}</main>
+          <Footer />
         </div>
       </body>
     </html>

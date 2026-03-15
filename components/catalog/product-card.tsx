@@ -120,9 +120,9 @@ export function ProductCard({ product, onQuickAdd, index = 0 }: ProductCardProps
                   src={product.images[imageIndex]}
                   alt={product.name}
                   fill
-                  unoptimized
                   className="object-contain transition-transform duration-300 group-hover:scale-105"
                   sizes="(max-width: 640px) 50vw, 25vw"
+                  loading="lazy"
                   onLoad={() => setImageLoaded(true)}
                   onError={() => setImageError(true)}
                 />

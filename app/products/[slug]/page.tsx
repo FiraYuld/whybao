@@ -179,7 +179,6 @@ export default function ProductPage() {
                   src={displayProduct.images[imageIndex]}
                   alt={displayProduct.name}
                   fill
-                  unoptimized
                   className="object-cover"
                   priority
                   sizes="(max-width: 1024px) 100vw, 50vw"
@@ -205,9 +204,9 @@ export default function ProductPage() {
                   src={img}
                   alt=""
                   fill
-                  unoptimized
                   className="object-cover"
                   sizes="80px"
+                  loading="lazy"
                 />
               </button>
             ))}
@@ -261,7 +260,7 @@ export default function ProductPage() {
             </div>
           )}
 
-          {displayProduct.colors.length > 0 && (
+          {displayProduct.colors.length > 1 && (
             <div className="mt-6">
               <h3 className="text-sm font-medium">Цвет</h3>
               <div className="mt-2 flex flex-wrap gap-2">
@@ -392,8 +391,8 @@ export default function ProductPage() {
                     alt={`${displayProduct.name} детальное фото ${i + 1}`}
                     width={800}
                     height={1200}
-                    unoptimized
                     className="h-auto max-w-full w-full object-cover"
+                    loading="lazy"
                     onLoad={() =>
                       setLoadedLongIndexes((prev) => new Set(prev).add(i))
                     }
