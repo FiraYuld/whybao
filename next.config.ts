@@ -6,6 +6,7 @@ const nextConfig: NextConfig = {
       { pathname: "/logo.webp" },
       { pathname: "/apple-touch-icon.png" },
       { pathname: "/products/**" },
+      { pathname: "/hero/**" },
     ],
   },
 };

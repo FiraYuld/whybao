@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
@@ -55,10 +56,16 @@ export function HeroSlider() {
           transition={{ duration: 0.5 }}
           className="absolute inset-0"
         >
-          <div
-            className="absolute inset-0 bg-center bg-no-repeat bg-cover md:bg-contain"
-            style={{ backgroundImage: `url(${slides[current].image})` }}
-          />
+          <div className="absolute inset-0 bg-center bg-no-repeat bg-cover md:bg-contain">
+            <Image
+              src={slides[current].image}
+              alt=""
+              fill
+              className="object-cover object-center md:object-contain"
+              sizes="100vw"
+              priority={current === 0}
+            />
+          </div>
           <div className="absolute inset-0 flex flex-col justify-end items-start pb-5 pl-3 md:pb-8 md:pl-8 lg:pl-16">
             <motion.div
               initial={{ x: -20, opacity: 0 }}
