@@ -59,24 +59,24 @@ export function HeroSlider() {
             className="absolute inset-0 bg-center bg-no-repeat bg-cover md:bg-contain"
             style={{ backgroundImage: `url(${slides[current].image})` }}
           />
-          <div className="absolute inset-0 flex flex-col justify-end items-start pb-6 pl-4 md:pb-8 md:pl-8 lg:pl-16">
+          <div className="absolute inset-0 flex flex-col justify-end items-start pb-5 pl-3 md:pb-8 md:pl-8 lg:pl-16">
             <motion.div
               initial={{ x: -20, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               transition={{ delay: 0.2 }}
-              className="max-w-xl rounded-lg bg-black/40 px-4 py-3 backdrop-blur-sm md:px-5 md:py-4"
+              className="max-w-[min(16rem,75vw)] rounded-lg bg-black/40 px-3 py-2 backdrop-blur-sm md:max-w-xl md:px-5 md:py-4"
             >
-              <h1 className="font-accent text-3xl font-bold tracking-tight text-white drop-shadow-md md:text-4xl lg:text-5xl">
+              <h1 className="font-accent text-xl font-bold leading-tight tracking-tight text-white drop-shadow-md md:text-4xl lg:text-5xl">
                 {slides[current].title}
               </h1>
               {slides[current].subtitle ? (
-                <p className="mt-2 text-lg text-white/95 drop-shadow md:text-xl">
+                <p className="mt-1.5 line-clamp-2 text-sm text-white/95 drop-shadow md:line-clamp-none md:mt-2 md:text-lg">
                   {slides[current].subtitle}
                 </p>
               ) : null}
               <Link
                 href={slides[current].href}
-                className="mt-4 inline-flex h-10 items-center justify-center gap-1.5 rounded-lg bg-primary px-4 font-medium text-primary-foreground hover:bg-primary/90"
+                className="mt-3 inline-flex h-9 items-center justify-center gap-1.5 rounded-lg bg-primary px-3 text-sm font-medium text-primary-foreground hover:bg-primary/90 md:mt-4 md:h-10 md:px-4"
               >
                 {slides[current].cta}
                 <ChevronRight className="size-4" />
