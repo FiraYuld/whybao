@@ -24,30 +24,30 @@ const siteName = "WhyBao";
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "WhyBao - Тренды из Китая для тебя",
+    default: "WhyBao - твоё окно в мир трендовых китайских брендов",
     template: "%s | WhyBao",
   },
   description:
-    "WhyBao — байер-сервис: нишевые трендовые вещи из Китая, streetwear и casual. Бесплатная доставка в Россию. Why not Bao?",
+    "Байер-маркетплейс одежды, обуви и аксессуаров с бесплатной доставкой в Россию.",
   keywords: ["WhyBao", "байер", "Китай", "одежда из Китая", "streetwear", "доставка из Китая"],
-  icons: {
-    icon: "/logo.webp",
-    shortcut: "/logo.webp",
-    apple: "/apple-touch-icon.png",
-  },
+  icons: [
+    { url: "/favicon.ico", sizes: "any" },
+    { url: "/logo.webp", type: "image/webp", sizes: "512x512" },
+    { url: "/apple-touch-icon.png", type: "image/png", sizes: "180x180", rel: "apple-touch-icon" },
+  ],
   openGraph: {
     type: "website",
     locale: "ru_RU",
     url: siteUrl,
     siteName,
-    title: "WhyBao - Тренды из Китая для тебя",
-    description: "Байер-сервис WhyBao: трендовая одежда из Китая с бесплатной доставкой в РФ.",
+    title: "WhyBao - твоё окно в мир трендовых китайских брендов",
+    description: "Байер-маркетплейс одежды, обуви и аксессуаров с бесплатной доставкой в Россию.",
     images: [{ url: "/logo.webp", width: 512, height: 512, alt: "WhyBao" }],
   },
   twitter: {
     card: "summary",
-    title: "WhyBao - Тренды из Китая для тебя",
-    description: "Байер-сервис WhyBao: одежда из Китая, доставка в Россию.",
+    title: "WhyBao - твоё окно в мир трендовых китайских брендов",
+    description: "Байер-маркетплейс одежды, обуви и аксессуаров с бесплатной доставкой в Россию.",
   },
   alternates: {
     canonical: siteUrl,

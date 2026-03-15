@@ -2,12 +2,6 @@
 
 import Script from "next/script";
 
-declare global {
-  interface Window {
-    ym?: (id: number, action: string, params?: Record<string, unknown>) => void;
-  }
-}
-
 const YANDEX_METRIKA_ID = 107709081;
 
 function initMetrika() {
