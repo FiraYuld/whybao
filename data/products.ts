@@ -851,7 +851,7 @@ export const products: Product[] = [
     name: "Chiikawa - футбольные кроссовки",
     brand: "oldorder",
     category: "shoes",
-    price: 13000,
+    price: 14000,
     images: [
       "/products/oldorder1/1.webp",
       "/products/oldorder1/2.webp",
@@ -872,7 +872,7 @@ export const products: Product[] = [
     name: "Турбо Lite - коллаборация Chiikawa 2025",
     brand: "oldorder",
     category: "shoes",
-    price: 13000,
+    price: 14000,
     images: [
       "/products/oldorder2/1.webp",
       "/products/oldorder2/2.webp",
@@ -893,7 +893,7 @@ export const products: Product[] = [
     name: "Canvas shoes - коллаборация Chiikawa 2026",
     brand: "oldorder",
     category: "shoes",
-    price: 11600,
+    price: 12600,
     images: [
       "/products/oldorder3/1.webp",
       "/products/oldorder3/2.webp",
@@ -915,7 +915,7 @@ export const products: Product[] = [
     name: "Белый Жасмин",
     brand: "oldorder",
     category: "shoes",
-    price: 8500,
+    price: 9500,
     images: [
       "/products/oldorder4/1.webp",
       "/products/oldorder4/2.webp",

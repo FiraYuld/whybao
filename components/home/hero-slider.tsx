@@ -5,34 +5,31 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 
-/** Слайды: пока только градиенты; чтобы добавить фото, положите 1.webp, 2.webp, 3.webp в public/hero/ и задайте image в каждом слайде */
+/** Слайды: арты из public/hero (hero_1.webp, hero_2.webp, hero_3.webp) */
 const slides = [
   {
     id: 1,
-    title: "Why not Bao?",
-    subtitle: "Тренды из Китая для тебя",
-    image: undefined as string | undefined,
-    background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)",
-    cta: "Смотреть новинки",
-    href: "/shop?sort=newest",
+    title: "Весенний дроп",
+    subtitle: "Чтобы не отморозить попи и быть в прайме",
+    image: "/hero/hero_1.webp",
+    cta: "Куртки и пальто",
+    href: "/shop?category=coats",
   },
   {
     id: 2,
-    title: "Streetwear с китайским вайбом",
-    subtitle: "Уникальные вещи для Gen Z",
-    image: undefined as string | undefined,
-    background: "linear-gradient(135deg, #2d1b4e 0%, #1a0a2e 50%, #0d0221 100%)",
-    cta: "В каталог",
-    href: "/shop",
+    title: "GRWM на учёбу",
+    subtitle: "",
+    image: "/hero/hero_2.webp",
+    cta: "Блузки и рубашки",
+    href: "/shop?category=shirts-blouses",
   },
   {
     id: 3,
-    title: "Новая коллекция Girlyhalo",
-    subtitle: "Куртки и пальто на каждый день",
-    image: undefined as string | undefined,
-    background: "linear-gradient(135deg, #1e3a5f 0%, #0d2137 50%, #051a2d 100%)",
-    cta: "Смотреть бренд",
-    href: "/brands/girlyhalo",
+    title: "Новинки сезона",
+    subtitle: "Только в нашем каталоге по самым низким ценам",
+    image: "/hero/hero_3.webp",
+    cta: "В каталог",
+    href: "/shop",
   },
 ];
 
@@ -48,7 +45,7 @@ export function HeroSlider() {
   }, []);
 
   return (
-    <section className="relative h-[50vh] min-h-[320px] overflow-hidden md:h-[60vh] lg:h-[70vh]">
+    <section className="relative w-full overflow-hidden aspect-square md:aspect-video">
       <AnimatePresence mode="wait">
         <motion.div
           key={slides[current].id}
@@ -59,30 +56,27 @@ export function HeroSlider() {
           className="absolute inset-0"
         >
           <div
-            className="absolute inset-0 bg-cover bg-center"
-            style={
-              slides[current].image
-                ? { backgroundImage: `url(${slides[current].image})` }
-                : { background: slides[current].background }
-            }
+            className="absolute inset-0 bg-center bg-no-repeat bg-cover md:bg-contain"
+            style={{ backgroundImage: `url(${slides[current].image})` }}
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-background/90 via-background/50 to-transparent" />
-          <div className="relative flex h-full flex-col justify-center px-4 md:px-8 lg:px-16">
+          <div className="absolute inset-0 flex flex-col justify-end items-start pb-6 pl-4 md:pb-8 md:pl-8 lg:pl-16">
             <motion.div
               initial={{ x: -20, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               transition={{ delay: 0.2 }}
-              className="max-w-xl"
+              className="max-w-xl rounded-lg bg-black/40 px-4 py-3 backdrop-blur-sm md:px-5 md:py-4"
             >
-              <h1 className="font-accent text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl">
+              <h1 className="font-accent text-3xl font-bold tracking-tight text-white drop-shadow-md md:text-4xl lg:text-5xl">
                 {slides[current].title}
               </h1>
-              <p className="mt-2 text-lg text-muted-foreground md:text-xl">
-                {slides[current].subtitle}
-              </p>
+              {slides[current].subtitle ? (
+                <p className="mt-2 text-lg text-white/95 drop-shadow md:text-xl">
+                  {slides[current].subtitle}
+                </p>
+              ) : null}
               <Link
                 href={slides[current].href}
-                className="mt-6 inline-flex h-10 items-center justify-center gap-1.5 rounded-lg bg-primary px-4 font-medium text-primary-foreground hover:bg-primary/90"
+                className="mt-4 inline-flex h-10 items-center justify-center gap-1.5 rounded-lg bg-primary px-4 font-medium text-primary-foreground hover:bg-primary/90"
               >
                 {slides[current].cta}
                 <ChevronRight className="size-4" />
