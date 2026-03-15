@@ -46,8 +46,9 @@ export function formatOrderMessage(
     lines.push(
       `${idx + 1}. ${i.name}`
     );
+    const sizeColor = i.color ? `${i.size}, ${i.color}` : i.size;
     lines.push(
-      `   ${i.size}, ${i.color} · ${rub(i.price)} × ${i.quantity} = ${rub(sum)}`
+      `   ${sizeColor} · ${rub(i.price)} × ${i.quantity} = ${rub(sum)}`
     );
   });
   lines.push("");

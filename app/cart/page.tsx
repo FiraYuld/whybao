@@ -57,7 +57,7 @@ export default function CartPage() {
                     {item.name}
                   </Link>
                   <p className="text-sm text-muted-foreground">
-                    {item.size}, {item.color}
+                    {item.color ? `${item.size}, ${item.color}` : item.size}
                   </p>
                   <div className="mt-2 flex items-center gap-2">
                     <select

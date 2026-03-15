@@ -129,7 +129,7 @@ export default function ProductPage() {
       price: displayProduct.price,
       image: displayProduct.images[0],
       size: selectedSize,
-      color: selectedColor,
+      color: displayProduct.colors.length > 1 ? selectedColor : "",
     });
     setCartJustAdded(true);
     setTimeout(() => setCartJustAdded(false), 1800);

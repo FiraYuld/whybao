@@ -67,7 +67,7 @@ export function ProductCard({ product, onQuickAdd, index = 0 }: ProductCardProps
     e.preventDefault();
     if (justAdded) return;
     const size = product.sizes[0];
-    const color = product.colors[0]?.name ?? "Чёрный";
+    const color = product.colors.length > 1 ? (product.colors[0]?.name ?? "") : "";
     addItem({
       productId: product.id,
       slug: product.slug,
