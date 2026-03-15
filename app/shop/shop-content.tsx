@@ -36,13 +36,16 @@ export function ShopContent() {
   const categoryParam = searchParams.get("category");
   const sortParam = searchParams.get("sort");
 
+  // URL — источник правды: без параметров сбрасываем фильтры, с параметрами — выставляем только их
   useEffect(() => {
-    if (categoryParam) {
-      useFilterStore.getState().toggleCategory(categoryParam);
+    const store = useFilterStore.getState();
+    if (categoryParam == null && sortParam == null) {
+      store.resetFilters();
+      return;
     }
-    if (sortParam) {
-      useFilterStore.getState().setSortBy(sortParam as typeof filters.sortBy);
-    }
+    store.resetFilters();
+    if (categoryParam) store.toggleCategory(categoryParam);
+    if (sortParam) store.setSortBy(sortParam as typeof filters.sortBy);
   }, [categoryParam, sortParam]);
 
   const filteredProducts = useMemo(
