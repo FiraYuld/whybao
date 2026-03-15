@@ -62,7 +62,8 @@ export function HeroSlider() {
               alt=""
               fill
               className="object-cover object-center md:object-contain"
-              sizes="100vw"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 1400px"
+              quality={95}
               priority={current === 0}
             />
           </div>
