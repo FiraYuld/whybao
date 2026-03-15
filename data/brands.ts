@@ -9,6 +9,7 @@ export const brands = [
   { id: "oldorder", name: "OLDORDER", slug: "oldorder" },
   { id: "echosta", name: "ECHOSTA", slug: "echosta" },
   { id: "ariseism", name: "Ariseism", slug: "ariseism" },
+  { id: "cheeseday", name: "CHEESEDAY", slug: "cheeseday" },
 ] as const;
 
 export type BrandSlug = (typeof brands)[number]["slug"];

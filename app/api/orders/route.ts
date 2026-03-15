@@ -3,6 +3,45 @@ import { formatOrderMessage, type OrderItem, type OrderCustomer } from "@/lib/fo
 
 const TELEGRAM_API = "https://api.telegram.org";
 
+const RATE_LIMIT_WINDOW_MS = 15 * 60 * 1000; // 15 минут
+const RATE_LIMIT_MAX = 10; // макс. заявок с одного IP за окно
+
+const rateLimitStore = new Map<
+  string,
+  { count: number; resetAt: number }
+>();
+
+function getClientIp(request: Request): string {
+  const xff = request.headers.get("x-forwarded-for");
+  if (xff) return xff.split(",")[0]?.trim() ?? "unknown";
+  const xri = request.headers.get("x-real-ip");
+  return xri ?? "unknown";
+}
+
+function isRateLimited(ip: string): boolean {
+  const now = Date.now();
+  let entry = rateLimitStore.get(ip);
+  if (!entry) {
+    rateLimitStore.set(ip, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
+    return false;
+  }
+  if (now >= entry.resetAt) {
+    entry = { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS };
+    rateLimitStore.set(ip, entry);
+    return false;
+  }
+  entry.count += 1;
+  if (entry.count > RATE_LIMIT_MAX) return true;
+  return false;
+}
+
+function cleanupRateLimitStore() {
+  const now = Date.now();
+  for (const [key, val] of rateLimitStore.entries()) {
+    if (now >= val.resetAt) rateLimitStore.delete(key);
+  }
+}
+
 export interface OrderPayload {
   orderId: string;
   items: OrderItem[];
@@ -43,6 +82,15 @@ function validatePayload(body: unknown): body is OrderPayload {
 }
 
 export async function POST(request: Request) {
+  cleanupRateLimitStore();
+  const ip = getClientIp(request);
+  if (isRateLimited(ip)) {
+    return NextResponse.json(
+      { error: "Слишком много заявок. Попробуйте позже (лимит: 10 за 15 минут)." },
+      { status: 429 }
+    );
+  }
+
   const token = process.env.TELEGRAM_BOT_TOKEN;
   const chatId = process.env.TELEGRAM_ORDER_CHAT_ID;
 

@@ -394,6 +394,17 @@ export default function CheckoutPage() {
           <p className="text-sm text-destructive">{error}</p>
         )}
 
+        <p className="text-xs text-muted-foreground">
+          Оформляя заказ, вы соглашаетесь с{" "}
+          <Link href="/privacy" className="text-primary underline underline-offset-2 hover:no-underline">
+            Политикой конфиденциальности
+          </Link>{" "}
+          и{" "}
+          <Link href="/terms" className="text-primary underline underline-offset-2 hover:no-underline">
+            Пользовательским соглашением
+          </Link>.
+        </p>
+
         <div className="rounded-lg border bg-muted/50 p-4">
           {appliedPromo ? (
             <>
