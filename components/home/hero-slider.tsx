@@ -1,18 +1,22 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 
-/** Слайды: арты из public/hero (hero_1.webp, hero_2.webp, hero_3.webp) */
+/**
+ * Слайды: public/hero/
+ * - Десктоп: hero_1.webp … (1920×1080)
+ * - Мобильные: hero_1_mobile.webp … (квадрат, например 1080×1080) — меньше трафика, лучше качество
+ */
 const slides = [
   {
     id: 1,
     title: "Весенний дроп",
     subtitle: "Чтобы не отморозить попи и быть в прайме",
     image: "/hero/hero_1.webp",
+    imageMobile: "/hero/hero_1_mobile.webp",
     cta: "Куртки и пальто",
     href: "/shop?category=coats",
   },
@@ -21,6 +25,7 @@ const slides = [
     title: "GRWM на учёбу",
     subtitle: "",
     image: "/hero/hero_2.webp",
+    imageMobile: "/hero/hero_2_mobile.webp",
     cta: "Блузки и рубашки",
     href: "/shop?category=shirts-blouses",
   },
@@ -29,6 +34,7 @@ const slides = [
     title: "Новинки сезона",
     subtitle: "Только в нашем каталоге по самым низким ценам",
     image: "/hero/hero_3.webp",
+    imageMobile: "/hero/hero_3_mobile.webp",
     cta: "В каталог",
     href: "/shop",
   },
@@ -57,15 +63,23 @@ export function HeroSlider() {
           className="absolute inset-0"
         >
           <div className="absolute inset-0 bg-center bg-no-repeat bg-cover md:bg-contain">
-            <Image
-              src={slides[current].image}
-              alt=""
-              fill
-              className="object-cover object-center md:object-contain"
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 1400px"
-              quality={95}
-              priority={current === 0}
-            />
+            {/* picture: браузер грузит только один источник по media — мобильные = квадрат, десктоп = 1920×1080 */}
+            <picture className="absolute inset-0 block size-full">
+              <source
+                media="(max-width: 767px)"
+                srcSet={slides[current].imageMobile ?? slides[current].image}
+              />
+              <source
+                media="(min-width: 768px)"
+                srcSet={slides[current].image}
+              />
+              <img
+                src={slides[current].image}
+                alt=""
+                className="size-full object-cover object-center md:object-contain"
+                fetchPriority={current === 0 ? "high" : undefined}
+              />
+            </picture>
           </div>
           <div className="absolute inset-0 flex flex-col justify-end items-start pb-5 pl-3 md:pb-8 md:pl-8 lg:pl-16">
             <motion.div
