@@ -54,8 +54,10 @@ async function main() {
   }
 
   const productDir = path.join(PUBLIC_DIR, "products");
+  const heroDir = path.join(PUBLIC_DIR, "hero");
   const images = [
     ...walkDir(productDir),
+    ...walkDir(heroDir),
     ...(fs.existsSync(path.join(PUBLIC_DIR, "logo.png")) ? [path.join(PUBLIC_DIR, "logo.png")] : []),
   ];
 
