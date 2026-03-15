@@ -78,7 +78,9 @@ export default function RootLayout({
   return (
     <html lang="ru" className="touch-manipulation">
       <head>
-        <link rel="preload" href="/hero/hero_1.webp" as="image" />
+        {/* LCP: первый кадр hero — preload по media, чтобы грузился сразу */}
+        <link rel="preload" href="/hero/hero_1_mobile.webp" as="image" media="(max-width: 767px)" />
+        <link rel="preload" href="/hero/hero_1.webp" as="image" media="(min-width: 768px)" />
       </head>
       <body
         className={`${inter.variable} ${outfit.variable} min-h-screen w-full bg-background text-foreground antialiased`}
