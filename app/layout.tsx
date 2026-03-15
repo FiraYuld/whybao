@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Inter, Outfit } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/layout/navbar";
+import { YandexMetrika } from "@/components/analytics/yandex-metrika";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -81,6 +82,7 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+        <YandexMetrika />
         <div className="flex min-h-screen min-w-0 flex-col max-w-full">
           <Navbar />
           <main className="min-w-0 flex-1 max-w-full overflow-x-hidden">{children}</main>
