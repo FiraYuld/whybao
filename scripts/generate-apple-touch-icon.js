@@ -13,7 +13,8 @@ const APP_DIR = path.join(ROOT, "app");
 const LOGO = path.join(PUBLIC_DIR, "logo.webp");
 const APPLE_ICON = path.join(PUBLIC_DIR, "apple-touch-icon.png");
 const FAVICON_PUBLIC = path.join(PUBLIC_DIR, "favicon.ico");
-const FAVICON_APP = path.join(APP_DIR, "icon.ico");
+const FAVICON_APP_ICON = path.join(APP_DIR, "icon.ico");
+const FAVICON_APP_FAVICON = path.join(APP_DIR, "favicon.ico");
 
 async function main() {
   if (!fs.existsSync(LOGO)) {
@@ -33,8 +34,9 @@ async function main() {
   const png32 = await sharp(LOGO).resize(32, 32).png().toBuffer();
   const ico = await toIco([png16, png32]);
   fs.writeFileSync(FAVICON_PUBLIC, ico);
-  fs.writeFileSync(FAVICON_APP, ico);
-  console.log(`Создан ${path.relative(process.cwd(), FAVICON_PUBLIC)} и app/icon.ico (ICO 16×16, 32×32)`);
+  fs.writeFileSync(FAVICON_APP_ICON, ico);
+  fs.writeFileSync(FAVICON_APP_FAVICON, ico);
+  console.log(`Создан public/favicon.ico, app/icon.ico, app/favicon.ico (ICO 16×16, 32×32)`);
 }
 
 main().catch((err) => {

@@ -3,6 +3,8 @@ import { Inter, Outfit } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { YandexMetrika } from "@/components/analytics/yandex-metrika";
 import { CookieConsent } from "@/components/cookie-consent";
 
@@ -90,6 +92,8 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
         <YandexMetrika />
+        <Analytics />
+        <SpeedInsights />
         <CookieConsent />
         <div className="flex min-h-screen min-w-0 flex-col max-w-full">
           <Navbar />
