@@ -77,6 +77,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ru" className="touch-manipulation">
+      <head>
+        <link rel="preload" href="/hero/hero_1.webp" as="image" />
+      </head>
       <body
         className={`${inter.variable} ${outfit.variable} min-h-screen w-full bg-background text-foreground antialiased`}
       >

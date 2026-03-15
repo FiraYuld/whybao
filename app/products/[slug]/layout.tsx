@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const description =
     product.description.slice(0, 155).replace(/\n/g, " ").trim() + (product.description.length > 155 ? "…" : "");
   const ogImage = product.images[0]
-    ? { url: product.images[0], width: 800, height: 1067, alt: product.name }
+    ? { url: product.images[0], width: 1200, height: 1600, alt: product.name }
     : undefined;
 
   return {
@@ -31,7 +31,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title,
       description,
+      type: "website",
       ...(ogImage && { images: [ogImage] }),
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      ...(ogImage && { images: [ogImage.url] }),
     },
   };
 }
