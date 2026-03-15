@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useCartStore } from "@/lib/store/cart-store";
+import { reachGoal } from "@/lib/analytics";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { formatOrderMessage } from "@/lib/format-order-message";
@@ -222,6 +223,7 @@ export default function CheckoutPage() {
       clearTimeout(timeoutId);
 
       if (res.ok) {
+        reachGoal("purchase");
         clearCart();
         try {
           window.localStorage.removeItem(CHECKOUT_STORAGE_KEY);
