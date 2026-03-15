@@ -7,7 +7,7 @@ const YANDEX_METRIKA_ID = 107709081;
 
 declare global {
   interface Window {
-    ym?: (id: number, action: string, target?: string) => void;
+    ym?: (id: number, action: string, params?: Record<string, unknown> | string) => void;
   }
 }
 
