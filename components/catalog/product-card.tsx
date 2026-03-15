@@ -8,6 +8,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { useCartStore } from "@/lib/store/cart-store";
 import { useWishlistStore } from "@/lib/store/wishlist-store";
+import { reachGoal } from "@/lib/analytics";
 import type { Product } from "@/data/products";
 import { brands } from "@/data/brands";
 import { categories } from "@/data/categories";
@@ -77,6 +78,7 @@ export function ProductCard({ product, onQuickAdd, index = 0 }: ProductCardProps
       size,
       color,
     });
+    reachGoal("add_to_cart");
     setJustAdded(true);
     setTimeout(() => setJustAdded(false), 1800);
     onQuickAdd?.(product);
@@ -84,6 +86,7 @@ export function ProductCard({ product, onQuickAdd, index = 0 }: ProductCardProps
 
   const handleWishlist = (e: React.MouseEvent) => {
     e.preventDefault();
+    if (!inWishlist) reachGoal("add_to_wishlist");
     toggleWishlist(product.slug);
   };
 

@@ -10,6 +10,7 @@ import { getProductBySlug, getSetProducts } from "@/lib/product-utils";
 import { brands } from "@/data/brands";
 import { useCartStore } from "@/lib/store/cart-store";
 import { useWishlistStore } from "@/lib/store/wishlist-store";
+import { reachGoal } from "@/lib/analytics";
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 import { ProductCard } from "@/components/catalog/product-card";
 import { AnimatePresence, motion } from "framer-motion";
@@ -131,6 +132,7 @@ export default function ProductPage() {
       size: selectedSize,
       color: displayProduct.colors.length > 1 ? selectedColor : "",
     });
+    reachGoal("add_to_cart");
     setCartJustAdded(true);
     setTimeout(() => setCartJustAdded(false), 1800);
   };
@@ -342,7 +344,10 @@ export default function ProductPage() {
             <Button
               size="lg"
               variant="outline"
-              onClick={() => toggleWishlist(slug)}
+              onClick={() => {
+                if (!inWishlist) reachGoal("add_to_wishlist");
+                toggleWishlist(slug);
+              }}
               className={inWishlist ? "flex-1 border-primary bg-primary/10" : "flex-1"}
             >
               <Heart
