@@ -29,7 +29,7 @@ export const products: Product[] = [
     name: "Куртка с меховым воротником",
     brand: "girlyhalo",
     category: "coats",
-    price: 6500,
+    price: 6490,
     images: [
       "/products/girlyhalo1/1.webp",
       "/products/girlyhalo1/2.webp",
@@ -64,7 +64,7 @@ export const products: Product[] = [
     name: "Пальто на пуговицах",
     brand: "girlyhalo",
     category: "coats",
-    price: 6500,
+    price: 6490,
     images: [
       "/products/girlyhalo2/1.webp",
       "/products/girlyhalo2/2.webp",
@@ -106,7 +106,7 @@ export const products: Product[] = [
     name: "Двухслойный лонгслив-обманка",
     brand: "girlyhalo",
     category: "longsleeves",
-    price: 2500,
+    price: 2490,
     images: [
       "/products/girlyhalo3/1.webp",
       "/products/girlyhalo3/2.webp",
@@ -141,7 +141,7 @@ export const products: Product[] = [
     name: "Двухслойная блузка-обманка",
     brand: "girlyhalo",
     category: "shirts-blouses",
-    price: 2500,
+    price: 2490,
     images: [
       "/products/girlyhalo4/1.webp",
       "/products/girlyhalo4/2.webp",
@@ -180,7 +180,7 @@ export const products: Product[] = [
     name: "Пальто с капюшоном и роговыми пуговицами",
     brand: "girlyhalo",
     category: "coats",
-    price: 5500,
+    price: 5450,
     images: [
       "/products/girlyhalo5/1.webp",
       "/products/girlyhalo5/2.webp",
@@ -218,7 +218,7 @@ export const products: Product[] = [
     name: "Пальто с бантом в клетку",
     brand: "zizifei",
     category: "coats",
-    price: 5200,
+    price: 5150,
     images: [
       "/products/zizifei1/1.webp",
       "/products/zizifei1/2.webp",
@@ -256,7 +256,7 @@ export const products: Product[] = [
     name: "Плащ-накидка в клетку",
     brand: "napsnaps",
     category: "coats",
-    price: 6400,
+    price: 6350,
     images: [
       "/products/napsnaps1/1.webp",
       "/products/napsnaps1/2.webp",
@@ -290,7 +290,7 @@ export const products: Product[] = [
     name: "Пальто «Pong Pong Winter Gift» с воротничком и бантом",
     brand: "zizifei",
     category: "coats",
-    price: 6500,
+    price: 6490,
     images: [
       "/products/zizifei2/1.webp",
       "/products/zizifei2/2.webp",
@@ -341,7 +341,7 @@ export const products: Product[] = [
     name: "Пальто с бантом и асимметричным подолом",
     brand: "zizifei",
     category: "coats",
-    price: 7900,
+    price: 7890,
     images: [
       "/products/zizifei3/1.webp",
       "/products/zizifei3/2.webp",
@@ -428,7 +428,7 @@ export const products: Product[] = [
     name: "Пуховик с кружевом и матросским воротником",
     brand: "zizifei",
     category: "coats",
-    price: 7300,
+    price: 7250,
     images: [
       "/products/zizifei5/1.webp",
       "/products/zizifei5/2.webp",
@@ -468,7 +468,7 @@ export const products: Product[] = [
     name: "Блуза «Входной билет в сказку» с бантом и воротничком в горох",
     brand: "zizifei",
     category: "shirts-blouses",
-    price: 6500,
+    price: 6490,
     images: [
       "/products/zizifei6/1.webp",
       "/products/zizifei6/2.webp",
@@ -510,7 +510,7 @@ export const products: Product[] = [
     name: "Джинсы карго с бантом и высокой талией",
     brand: "zizifei",
     category: "pants",
-    price: 5800,
+    price: 5790,
     images: [
       "/products/zizifei7/1.webp",
       "/products/zizifei7/2.webp",
@@ -551,7 +551,7 @@ export const products: Product[] = [
     name: "Брюки «Туманные строки» со съёмной драпировкой",
     brand: "jikoo",
     category: "pants",
-    price: 7000,
+    price: 6990,
     images: [
       "/products/jikoo1/1.webp",
       "/products/jikoo1/2.webp",
@@ -590,7 +590,7 @@ export const products: Product[] = [
     name: "Серая короткая худи «Клыки зверя»",
     brand: "jikoo",
     category: "hoodies",
-    price: 5500,
+    price: 5450,
     images: [
       "/products/jikoo2/1.webp",
       "/products/jikoo2/2.webp",
@@ -637,7 +637,7 @@ export const products: Product[] = [
     name: "Джинсы «Снег Хоккайдо» с вышивкой пингвин",
     brand: "betweenand",
     category: "pants",
-    price: 6200,
+    price: 6150,
     images: [
       "/products/betweenand1/1.webp",
       "/products/betweenand1/2.webp",
@@ -734,7 +734,7 @@ export const products: Product[] = [
     name: "Чёрные брюки в клетку с отворотами",
     brand: "unifree",
     category: "pants",
-    price: 3200,
+    price: 3150,
     images: [
       "/products/unifree2/1.webp",
       "/products/unifree2/2.webp",
@@ -773,7 +773,7 @@ export const products: Product[] = [
     name: "Зип-худи с капюшоном в горошек",
     brand: "weekendhub",
     category: "hoodies",
-    price: 3800,
+    price: 3790,
     images: [
       "/products/weekendhub1/1.webp",
       "/products/weekendhub1/2.webp",
@@ -813,7 +813,7 @@ export const products: Product[] = [
     name: "Брюки клеш с поясом в горошек",
     brand: "weekendhub",
     category: "pants",
-    price: 3800,
+    price: 3790,
     images: [
       "/products/weekendhub2/1.webp",
       "/products/weekendhub2/2.webp",
@@ -851,7 +851,7 @@ export const products: Product[] = [
     name: "Chiikawa - футбольные кроссовки",
     brand: "oldorder",
     category: "shoes",
-    price: 14000,
+    price: 13990,
     images: [
       "/products/oldorder1/1.webp",
       "/products/oldorder1/2.webp",
@@ -872,7 +872,7 @@ export const products: Product[] = [
     name: "Турбо Lite - коллаборация Chiikawa 2025",
     brand: "oldorder",
     category: "shoes",
-    price: 14000,
+    price: 13990,
     images: [
       "/products/oldorder2/1.webp",
       "/products/oldorder2/2.webp",
@@ -893,7 +893,7 @@ export const products: Product[] = [
     name: "Canvas shoes - коллаборация Chiikawa 2026",
     brand: "oldorder",
     category: "shoes",
-    price: 12600,
+    price: 12550,
     images: [
       "/products/oldorder3/1.webp",
       "/products/oldorder3/2.webp",
@@ -915,7 +915,7 @@ export const products: Product[] = [
     name: "Белый Жасмин",
     brand: "oldorder",
     category: "shoes",
-    price: 9500,
+    price: 9490,
     images: [
       "/products/oldorder4/1.webp",
       "/products/oldorder4/2.webp",
@@ -937,7 +937,7 @@ export const products: Product[] = [
     name: "Многослойная юбка макси в клетку",
     brand: "girlyhalo",
     category: "skirts",
-    price: 3400,
+    price: 3390,
     images: [
       "/products/girlyhalo6/1.webp",
       "/products/girlyhalo6/2.webp",
@@ -959,7 +959,7 @@ export const products: Product[] = [
     name: "Клетчатая рубашка приталенная с завязками и пышными рукавами",
     brand: "echosta",
     category: "shirts-blouses",
-    price: 4000,
+    price: 3990,
     images: [
       "/products/echosta1/1.webp",
       "/products/echosta1/2.webp",
@@ -1078,7 +1078,7 @@ export const products: Product[] = [
     name: "Темно-синий костюм с открытыми плечами - топ",
     brand: "ariseism",
     category: "shirts-blouses",
-    price: 4100,
+    price: 4050,
     images: [
       "/products/ariseism2/1.webp",
       "/products/ariseism2/2.webp",
@@ -1102,7 +1102,7 @@ export const products: Product[] = [
     name: "Темно-синий костюм с открытыми плечами - брюки",
     brand: "ariseism",
     category: "pants",
-    price: 4100,
+    price: 4050,
     images: [
       "/products/ariseism2/1.webp",
       "/products/ariseism2/2.webp",
@@ -1126,7 +1126,7 @@ export const products: Product[] = [
     name: "Клетчатая рубашка в винтажном стиле",
     brand: "ariseism",
     category: "shirts-blouses",
-    price: 3500,
+    price: 3450,
     images: [
       "/products/ariseism3/1.webp",
       "/products/ariseism3/2.webp",
@@ -1147,7 +1147,7 @@ export const products: Product[] = [
     name: 'Китайская блузка с вышивкой "Хайтан"',
     brand: "cheeseday",
     category: "shirts-blouses",
-    price: 6300,
+    price: 6290,
     images: [
       "/products/cheeseday1/1.webp",
       "/products/cheeseday1/2.webp",
@@ -1189,7 +1189,7 @@ export const products: Product[] = [
     name: 'Блуза "Поющий можжевельник" с галстуком и воланами',
     brand: "jikoo",
     category: "shirts-blouses",
-    price: 4500,
+    price: 4490,
     images: [
       "/products/jikoo4/1.webp",
       "/products/jikoo4/2.webp",
