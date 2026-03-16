@@ -39,3 +39,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# VPS / Docker (пока не используем)
+Dockerfile
+.dockerignore
+deploy/
