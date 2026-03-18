@@ -32,6 +32,7 @@ export default function ProductPage() {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
   const [loadedLongIndexes, setLoadedLongIndexes] = useState<Set<number>>(new Set());
+  const [showAllLongImages, setShowAllLongImages] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [cartJustAdded, setCartJustAdded] = useState(false);
 
@@ -42,6 +43,7 @@ export default function ProductPage() {
     setSelectedColor(displayProduct.colors[0]?.name ?? "");
     setImageIndex(0);
     setLoadedLongIndexes(new Set());
+    setShowAllLongImages(false);
     setImageLoaded(false);
   }, [displayProduct?.slug]);
 
@@ -94,7 +96,7 @@ export default function ProductPage() {
   // Предзагрузка первых longImages при открытии страницы
   useEffect(() => {
     if (!displayProduct?.longImages?.length || typeof window === "undefined") return;
-    displayProduct.longImages.slice(0, 4).forEach((src) => {
+    displayProduct.longImages.slice(0, 3).forEach((src) => {
       const img = new window.Image();
       img.src = src;
     });
@@ -388,7 +390,8 @@ export default function ProductPage() {
 
           {displayProduct.longImages && displayProduct.longImages.length > 0 && (
             <div className="mt-8 w-full max-w-full space-y-0 md:max-w-2xl md:mx-auto">
-              {displayProduct.longImages.map((src, i) => (
+              {(showAllLongImages ? displayProduct.longImages : displayProduct.longImages.slice(0, 3)).map(
+                (src, i) => (
                 <div key={i} className="relative w-full max-w-full overflow-hidden min-h-[200px]">
                   {!loadedLongIndexes.has(i) && (
                     <div
@@ -409,6 +412,18 @@ export default function ProductPage() {
                   />
                 </div>
               ))}
+              {!showAllLongImages && displayProduct.longImages.length > 3 && (
+                <div className="pt-4">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="w-full"
+                    onClick={() => setShowAllLongImages(true)}
+                  >
+                    Показать ещё ({displayProduct.longImages.length - 3})
+                  </Button>
+                </div>
+              )}
             </div>
           )}
         </div>
