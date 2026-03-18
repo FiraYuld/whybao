@@ -36,11 +36,12 @@ export function ShopContent() {
   const categoryParam = searchParams.get("category");
   const sortParam = searchParams.get("sort");
 
-  // URL — источник правды: без параметров сбрасываем фильтры, с параметрами — выставляем только их
+  // URL — источник правды только когда параметры заданы.
+  // Если параметров нет, сохраняем текущие фильтры (важно при возврате со страницы товара).
   useEffect(() => {
     const store = useFilterStore.getState();
-    if (categoryParam == null && sortParam == null) {
-      store.resetFilters();
+    const hasUrlFilters = categoryParam != null || sortParam != null;
+    if (!hasUrlFilters) {
       return;
     }
     store.resetFilters();

@@ -46,9 +46,11 @@ export function formatOrderMessage(
     lines.push(
       `${idx + 1}. ${i.name}`
     );
-    const sizeColor = i.color ? `${i.size}, ${i.color}` : i.size;
+    const variant = [i.size, i.color].filter(Boolean).join(", ");
     lines.push(
-      `   ${sizeColor} · ${rub(i.price)} × ${i.quantity} = ${rub(sum)}`
+      variant
+        ? `   ${variant} · ${rub(i.price)} × ${i.quantity} = ${rub(sum)}`
+        : `   ${rub(i.price)} × ${i.quantity} = ${rub(sum)}`
     );
   });
   lines.push("");

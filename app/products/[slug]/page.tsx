@@ -32,6 +32,7 @@ export default function ProductPage() {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
   const [loadedLongIndexes, setLoadedLongIndexes] = useState<Set<number>>(new Set());
+  const [showAllLongImages, setShowAllLongImages] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [cartJustAdded, setCartJustAdded] = useState(false);
 
@@ -42,6 +43,7 @@ export default function ProductPage() {
     setSelectedColor(displayProduct.colors[0]?.name ?? "");
     setImageIndex(0);
     setLoadedLongIndexes(new Set());
+    setShowAllLongImages(false);
     setImageLoaded(false);
   }, [displayProduct?.slug]);
 
@@ -94,7 +96,7 @@ export default function ProductPage() {
   // Предзагрузка первых longImages при открытии страницы
   useEffect(() => {
     if (!displayProduct?.longImages?.length || typeof window === "undefined") return;
-    displayProduct.longImages.slice(0, 4).forEach((src) => {
+    displayProduct.longImages.slice(0, 3).forEach((src) => {
       const img = new window.Image();
       img.src = src;
     });
@@ -119,7 +121,8 @@ export default function ProductPage() {
 
   const brandName = brands.find((b) => b.slug === displayProduct.brand)?.name ?? displayProduct.brand;
 
-  const canAddToCart = !unavailableSizes.includes(selectedSize);
+  const hasSizes = displayProduct.sizes.length > 0;
+  const canAddToCart = hasSizes ? !unavailableSizes.includes(selectedSize) : true;
 
   const handleAddToCart = () => {
     if (!canAddToCart || cartJustAdded) return;
@@ -129,7 +132,7 @@ export default function ProductPage() {
       name: displayProduct.name,
       price: displayProduct.price,
       image: displayProduct.images[0],
-      size: selectedSize,
+      size: hasSizes ? selectedSize : "",
       color: displayProduct.colors.length > 1 ? selectedColor : "",
     });
     reachGoal("add_to_cart");
@@ -229,6 +232,9 @@ export default function ProductPage() {
           <p className="mt-4 text-2xl font-bold text-primary">
             {displayProduct.price.toLocaleString("ru-RU")} ₽
           </p>
+          <p className="mt-1 text-sm font-semibold text-muted-foreground">
+            доставка в РФ за 0 ₽
+          </p>
 
           {displayProduct.sizes.length > 0 && (
             <div className="mt-6">
@@ -271,9 +277,10 @@ export default function ProductPage() {
                     key={c.name}
                     type="button"
                     onClick={() => setSelectedColor(c.name)}
+                    aria-pressed={selectedColor === c.name}
                     className={`flex items-center gap-2 rounded-md border px-3 py-2 text-sm transition-colors ${
                       selectedColor === c.name
-                        ? "border-primary ring-2 ring-primary/20"
+                        ? "border-primary bg-primary text-primary-foreground ring-2 ring-primary/25"
                         : "border-input hover:bg-muted"
                     }`}
                   >
@@ -383,7 +390,8 @@ export default function ProductPage() {
 
           {displayProduct.longImages && displayProduct.longImages.length > 0 && (
             <div className="mt-8 w-full max-w-full space-y-0 md:max-w-2xl md:mx-auto">
-              {displayProduct.longImages.map((src, i) => (
+              {(showAllLongImages ? displayProduct.longImages : displayProduct.longImages.slice(0, 3)).map(
+                (src, i) => (
                 <div key={i} className="relative w-full max-w-full overflow-hidden min-h-[200px]">
                   {!loadedLongIndexes.has(i) && (
                     <div
@@ -404,6 +412,18 @@ export default function ProductPage() {
                   />
                 </div>
               ))}
+              {!showAllLongImages && displayProduct.longImages.length > 3 && (
+                <div className="pt-4">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="w-full"
+                    onClick={() => setShowAllLongImages(true)}
+                  >
+                    Показать ещё ({displayProduct.longImages.length - 3})
+                  </Button>
+                </div>
+              )}
             </div>
           )}
         </div>

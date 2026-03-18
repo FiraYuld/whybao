@@ -505,7 +505,11 @@ export default function CheckoutPage() {
               <ul className="mt-1 space-y-1 text-sm">
                 {confirmData.payload.items.map((i, idx) => (
                   <li key={idx}>
-                    {i.name} ({i.color ? `${i.size}, ${i.color}` : i.size}) - {i.price.toLocaleString("ru-RU")} ₽ × {i.quantity}
+                    {i.name}
+                    {([i.size, i.color].filter(Boolean).join(", ")) && (
+                      <> ({[i.size, i.color].filter(Boolean).join(", ")})</>
+                    )}{" "}
+                    - {i.price.toLocaleString("ru-RU")} ₽ × {i.quantity}
                   </li>
                 ))}
               </ul>
