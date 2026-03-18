@@ -67,7 +67,7 @@ export function ProductCard({ product, onQuickAdd, index = 0 }: ProductCardProps
   const handleQuickAdd = (e: React.MouseEvent) => {
     e.preventDefault();
     if (justAdded) return;
-    const size = product.sizes[0];
+    const size = product.sizes[0] ?? "";
     const color = product.colors.length > 1 ? (product.colors[0]?.name ?? "") : "";
     addItem({
       productId: product.id,

@@ -13,8 +13,6 @@ const SORT_OPTIONS: { value: SortOption; label: string }[] = [
   { value: "default", label: "По умолчанию" },
   { value: "price-asc", label: "Сначала дешевле" },
   { value: "price-desc", label: "Сначала дороже" },
-  { value: "newest", label: "Новинки" },
-  { value: "popular", label: "Популярные" },
 ];
 
 const LETTER_SIZES = ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL"];

@@ -56,9 +56,11 @@ export default function CartPage() {
                   >
                     {item.name}
                   </Link>
-                  <p className="text-sm text-muted-foreground">
-                    {item.color ? `${item.size}, ${item.color}` : item.size}
-                  </p>
+                  {([item.size, item.color].filter(Boolean).join(", ")) && (
+                    <p className="text-sm text-muted-foreground">
+                      {[item.size, item.color].filter(Boolean).join(", ")}
+                    </p>
+                  )}
                   <div className="mt-2 flex items-center gap-2">
                     <select
                       value={item.quantity}

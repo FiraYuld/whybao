@@ -78,9 +78,11 @@ export function CartDrawer() {
                       >
                         {item.name}
                       </Link>
-                      <p className="text-xs text-muted-foreground">
-                        {item.color ? `${item.size}, ${item.color}` : item.size}
-                      </p>
+                      {([item.size, item.color].filter(Boolean).join(", ")) && (
+                        <p className="text-xs text-muted-foreground">
+                          {[item.size, item.color].filter(Boolean).join(", ")}
+                        </p>
+                      )}
                       <div className="mt-1 flex items-center gap-2">
                         <select
                           value={item.quantity}

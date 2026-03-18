@@ -119,7 +119,8 @@ export default function ProductPage() {
 
   const brandName = brands.find((b) => b.slug === displayProduct.brand)?.name ?? displayProduct.brand;
 
-  const canAddToCart = !unavailableSizes.includes(selectedSize);
+  const hasSizes = displayProduct.sizes.length > 0;
+  const canAddToCart = hasSizes ? !unavailableSizes.includes(selectedSize) : true;
 
   const handleAddToCart = () => {
     if (!canAddToCart || cartJustAdded) return;
@@ -129,7 +130,7 @@ export default function ProductPage() {
       name: displayProduct.name,
       price: displayProduct.price,
       image: displayProduct.images[0],
-      size: selectedSize,
+      size: hasSizes ? selectedSize : "",
       color: displayProduct.colors.length > 1 ? selectedColor : "",
     });
     reachGoal("add_to_cart");
@@ -229,6 +230,9 @@ export default function ProductPage() {
           <p className="mt-4 text-2xl font-bold text-primary">
             {displayProduct.price.toLocaleString("ru-RU")} ₽
           </p>
+          <p className="mt-1 text-sm font-semibold text-muted-foreground">
+            доставка в РФ за 0 ₽
+          </p>
 
           {displayProduct.sizes.length > 0 && (
             <div className="mt-6">
@@ -271,9 +275,10 @@ export default function ProductPage() {
                     key={c.name}
                     type="button"
                     onClick={() => setSelectedColor(c.name)}
+                    aria-pressed={selectedColor === c.name}
                     className={`flex items-center gap-2 rounded-md border px-3 py-2 text-sm transition-colors ${
                       selectedColor === c.name
-                        ? "border-primary ring-2 ring-primary/20"
+                        ? "border-primary bg-primary text-primary-foreground ring-2 ring-primary/25"
                         : "border-input hover:bg-muted"
                     }`}
                   >
