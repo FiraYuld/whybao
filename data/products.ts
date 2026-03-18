@@ -1212,11 +1212,11 @@ export const products: Product[] = [
     category: "accessories",
     price: 1990,
     images: [
-      "/products/domilab1/1.png",
-      "/products/domilab1/2.png",
-      "/products/domilab1/3.png",
-      "/products/domilab1/4.png",
-      "/products/domilab1/5.png",
+      "/products/domilab1/1.webp",
+      "/products/domilab1/2.webp",
+      "/products/domilab1/3.webp",
+      "/products/domilab1/4.webp",
+      "/products/domilab1/5.webp",
     ],
     sizes: [],
     colors: [
@@ -1225,7 +1225,7 @@ export const products: Product[] = [
     ],
     description:
       'Кулон DomiLab "Шипованное сердце" — 3D‑печать.\n\nПараметры / материалы:\n· Технология: FDM 3D‑печать\n· Основной материал: PLA, шелковисто‑белый',
-    longImages: Array.from({ length: 9 }, (_, i) => `/products/domilab1/${i + 1}.png`),
+    longImages: Array.from({ length: 9 }, (_, i) => `/products/domilab1/${i + 1}.webp`),
     isNew: true,
   },
   {
@@ -1236,17 +1236,17 @@ export const products: Product[] = [
     category: "accessories",
     price: 2990,
     images: [
-      "/products/domilab2/1.png",
-      "/products/domilab2/2.png",
-      "/products/domilab2/3.png",
-      "/products/domilab2/4.png",
-      "/products/domilab2/5.png",
+      "/products/domilab2/1.webp",
+      "/products/domilab2/2.webp",
+      "/products/domilab2/3.webp",
+      "/products/domilab2/4.webp",
+      "/products/domilab2/5.webp",
     ],
     sizes: [],
     colors: [{ name: "Белый", hex: "#fafafa" }],
     description:
       'Подвеска DomiLab "Орхидея Фаленопсис" — 3D‑печать.\n\nПараметры / материалы:\n· Технология: FDM 3D‑печать\n· Основной материал: PLA, шелковисто‑белый\n· Элементы: стеклянный жемчуг, медный сплав, бусины CCB',
-    longImages: Array.from({ length: 6 }, (_, i) => `/products/domilab2/${i + 1}.png`),
+    longImages: Array.from({ length: 6 }, (_, i) => `/products/domilab2/${i + 1}.webp`),
     isNew: true,
   },
   {
@@ -1257,16 +1257,16 @@ export const products: Product[] = [
     category: "accessories",
     price: 1990,
     images: [
-      "/products/domilab3/1.png",
-      "/products/domilab3/2.png",
-      "/products/domilab3/3.png",
-      "/products/domilab3/4.png",
+      "/products/domilab3/1.webp",
+      "/products/domilab3/2.webp",
+      "/products/domilab3/3.webp",
+      "/products/domilab3/4.webp",
     ],
     sizes: [],
     colors: [{ name: "Белый", hex: "#fafafa" }],
     description:
       'Подвеска DomiLab "Орхидея Фаленопсис 1" — 3D‑печать (многослойная).\n\nПараметры / материалы:\n· Бренд: Yan Zhu Ji (Свечная коллекция)\n· Технология: FDM 3D‑печать\n· Основной материал: PLA, шелковисто‑белый\n· Элементы: стеклянный жемчуг, медный сплав, бусины CCB',
-    longImages: Array.from({ length: 4 }, (_, i) => `/products/domilab3/${i + 1}.png`),
+    longImages: Array.from({ length: 4 }, (_, i) => `/products/domilab3/${i + 1}.webp`),
     isNew: true,
   },
   {
@@ -1277,11 +1277,11 @@ export const products: Product[] = [
     category: "accessories",
     price: 4190,
     images: [
-      "/products/vanwalk1/1.jpg",
-      "/products/vanwalk1/2.png",
-      "/products/vanwalk1/3.png",
-      "/products/vanwalk1/4.png",
-      "/products/vanwalk1/5.png",
+      "/products/vanwalk1/1.webp",
+      "/products/vanwalk1/2.webp",
+      "/products/vanwalk1/3.webp",
+      "/products/vanwalk1/4.webp",
+      "/products/vanwalk1/5.webp",
     ],
     sizes: [],
     colors: [
@@ -1291,7 +1291,7 @@ export const products: Product[] = [
     ],
     description:
       'VANWALK Starry (новая модель) — сумка‑подушка в горошек для повседневных образов и работы.\n\nРазмер:\n· 31 × 11 × 16 см\n\nМатериалы:\n· Полиэстер (основной материал для большинства цветов)\n· Хлопок (основной материал для чёрного цвета)\n\nВес / объём:\n· Вес: 0.3 кг\n· Объём: 5.45 л',
-    longImages: Array.from({ length: 23 }, (_, i) => `/products/vanwalk1/desc_${i + 1}.png`),
+    longImages: Array.from({ length: 23 }, (_, i) => `/products/vanwalk1/desc_${i + 1}.webp`),
     isNew: true,
   },
   {
@@ -1302,11 +1302,11 @@ export const products: Product[] = [
     category: "accessories",
     price: 3990,
     images: [
-      "/products/vanwalk2/1.png",
-      "/products/vanwalk2/2.png",
-      "/products/vanwalk2/3.png",
-      "/products/vanwalk2/4.png",
-      "/products/vanwalk2/5.png",
+      "/products/vanwalk2/1.webp",
+      "/products/vanwalk2/2.webp",
+      "/products/vanwalk2/3.webp",
+      "/products/vanwalk2/4.webp",
+      "/products/vanwalk2/5.webp",
     ],
     sizes: [],
     colors: [
@@ -1316,7 +1316,7 @@ export const products: Product[] = [
     ],
     description:
       "VANWALK Lucky Pony — новый лимитированный выпуск.\n\nРазмер:\n· 19.5 × 10 × 10.5 см\n\nМатериалы:\n· Серый цвет: полиэстер\n· Чёрный цвет: хлопок\n· Розовый цвет: полиэстер (с водоотталкивающей пропиткой)\n\nВес:\n· 0.32 кг",
-    longImages: Array.from({ length: 7 }, (_, i) => `/products/vanwalk2/${i + 1}.png`),
+    longImages: Array.from({ length: 7 }, (_, i) => `/products/vanwalk2/${i + 1}.webp`),
     isNew: true,
   },
   {
@@ -1327,11 +1327,11 @@ export const products: Product[] = [
     category: "accessories",
     price: 5790,
     images: [
-      "/products/onetime1/1.png",
-      "/products/onetime1/2.png",
-      "/products/onetime1/3.png",
-      "/products/onetime1/4.png",
-      "/products/onetime1/5.png",
+      "/products/onetime1/1.webp",
+      "/products/onetime1/2.webp",
+      "/products/onetime1/3.webp",
+      "/products/onetime1/4.webp",
+      "/products/onetime1/5.webp",
     ],
     sizes: [],
     colors: [
@@ -1345,8 +1345,8 @@ export const products: Product[] = [
     description:
       'onetime — сумка Фань Шижань в стиле "бостон".\n\nРазмер:\n· 22.5 × 10.5 × 13 см\n· Длина верха (отверстия): 20 см\n· Длина съёмного регулируемого ремня: 93–114 см\n· Высота коротких ручек: 10 см\n· Ширина ремня: 2 см\n\nМатериалы:\n· Основной материал: PU (искусственная кожа) с масляно‑восковым покрытием\n· Внутренний материал: ткань\n· Фурнитура: сплав металлов\n\nВес:\n· ~0.53 кг',
     longImages: [
-      ...Array.from({ length: 12 }, (_, i) => `/products/onetime1/${i + 1}.png`),
-      ...Array.from({ length: 28 }, (_, i) => `/products/onetime1/desc_${i + 1}.png`),
+      ...Array.from({ length: 12 }, (_, i) => `/products/onetime1/${i + 1}.webp`),
+      ...Array.from({ length: 28 }, (_, i) => `/products/onetime1/desc_${i + 1}.webp`),
     ],
     isNew: true,
   },
@@ -1358,11 +1358,11 @@ export const products: Product[] = [
     category: "accessories",
     price: 5390,
     images: [
-      "/products/girlsheart1/1.png",
-      "/products/girlsheart1/2.png",
-      "/products/girlsheart1/3.png",
-      "/products/girlsheart1/4.png",
-      "/products/girlsheart1/5.png",
+      "/products/girlsheart1/1.webp",
+      "/products/girlsheart1/2.webp",
+      "/products/girlsheart1/3.webp",
+      "/products/girlsheart1/4.webp",
+      "/products/girlsheart1/5.webp",
     ],
     sizes: [],
     colors: [
@@ -1372,7 +1372,7 @@ export const products: Product[] = [
     ],
     description:
       "GIRLS' HEART Chaos Butterfly — сумка‑багет через плечо с карманами и бантом.\n\nРазмер:\n· 28 × 10.5 × 14 см\n\nМатериалы:\n· Основной материал: искусственная кожа (полиуретан)\n· Внутренний материал: ткань",
-    longImages: Array.from({ length: 18 }, (_, i) => `/products/girlsheart1/desc_${i + 1}.png`),
+    longImages: Array.from({ length: 18 }, (_, i) => `/products/girlsheart1/desc_${i + 1}.webp`),
     isNew: true,
   },
 ];
